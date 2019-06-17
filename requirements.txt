@@ -3,3 +3,5 @@ gitpython
 pandas
 seaborn
 matplotlib
+numpy
+scipy
