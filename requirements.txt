@@ -1,0 +1,5 @@
+gitdb
+gitpython
+pandas
+seaborn
+matplotlib
