@@ -168,7 +168,7 @@ class code_dev_simulation():
             data = self.reference_graph.node[node]
             methods.append(data)
             sizes.append(len(data['method'].body))
-    
+
         in_degrees = [1 if s == 0 else s for s in in_degrees]
         caller_method_probabilities = list(np.array(sizes)/np.sum(sizes))
         callee_method_probabilities = list(np.array(in_degrees)/np.sum(in_degrees))
@@ -251,6 +251,7 @@ class code_dev_simulation():
         Returns:
             The number of changes made
         """
+        # print("remove a method")
         pass
 
     def create_class(self):
@@ -261,6 +262,7 @@ class code_dev_simulation():
         Returns:
             Created class
         """
+        # print("create a new class")
         pass
 
     def pick_unfit_method(self):

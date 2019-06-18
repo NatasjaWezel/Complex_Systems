@@ -12,6 +12,7 @@ from model import code_dev_simulation
 from java_printer import JavaPrinter
 
 DEFAULT_ITERATIONS = 1000
+# fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 PROBABILITIES = {
     'create_method': 0.1,
@@ -28,13 +29,17 @@ def run_repo_model():
     Argument 1 (int): Amount of iterations to run model
     Argument 2 (bool): Whether to generate the java files created during the simulation
     """
+
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
     model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES)
+
     print('Model instantiated...\n')
 
     print('Running model...')
+
     start_time = time.time()
     model.run_model()
+
     print('Model run completed..!\nTook {} seconds.\n'.format(time.time() - start_time))
 
     gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False

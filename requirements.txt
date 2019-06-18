@@ -5,3 +5,5 @@ seaborn
 matplotlib
 numpy
 scipy
+networkx==1.11
+plyj
