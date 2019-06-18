@@ -8,12 +8,13 @@ Evolution of Software
 
 Fitness of methods -> Uniform (random) distribution
 
-
 ### Creating
 
 ### Calling
 Take two functions and link them
+
 Question: how are these selected? Via something preferential?
+Answer: method S is chosen as the caller with probability proportional to the size of its body (number of statements).
 
 ### Updating
 
@@ -21,3 +22,4 @@ Question: how are these selected? Via something preferential?
 
 #### Ideas
 Code decay -> fitness decrease over time?
+Question: why?
