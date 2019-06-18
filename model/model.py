@@ -90,20 +90,27 @@ class code_dev_simulation():
         Uses probabilities dictionary to determine which function to use
         """
 
-        pass
-        # # Generate random number to determine which function to use
-        # probability = np.random.random()
-        # function_picker = 0
-        #
-        # for method in self.probabilities:
-        #     # Get chance that belongs to the next function
-        #     function_picker += self.probabilities[method]
-        #
-        #     if probability < function_picker:
-        #         # Execute the function
-        #         self.probabilities[method]()
+        # Generate random number to determine which function to use
+        probability = np.random.random()
+        function_picker = 0
 
+        for method in self.probabilities:
+            # Get chance that belongs to the next function
+            function_picker += self.probabilities[method]
 
+            # If probability is in the right bucket
+            if probability < function_picker:
+                # Execute the corresponding function
+                if method == "create_method":
+                    self.create_method()
+                elif method == "call_method":
+                    self.call_method()
+                elif method == "update_method":
+                    self.update_method()
+                elif method == "remove_method":
+                    self.remove_method()
+                else:
+                    self.create_class()
 
     def create_method(self):
         """
@@ -122,6 +129,7 @@ class code_dev_simulation():
             - Should a statement automatically be created when a method is created?
               Consistent empty method creation does not make much sense
         """
+        # print("create a method")
         pass
 
     def call_method(self):
@@ -137,6 +145,7 @@ class code_dev_simulation():
         Returns:
             The number of changes made
         """
+        # print("call two method")
         pass
 
     def update_method(self):
@@ -150,7 +159,7 @@ class code_dev_simulation():
         Returns:
             The number of changes made
         """
-        pass
+        print("update a method")
 
     def remove_method(self, method=None):
         """
@@ -168,6 +177,7 @@ class code_dev_simulation():
         Returns:
             The number of changes made
         """
+        # print("remove a method")
         pass
 
     def create_class(self):
@@ -178,6 +188,7 @@ class code_dev_simulation():
         Returns:
             Created class
         """
+        # print("create a new class")
         pass
 
     def pick_unfit_method(self):
