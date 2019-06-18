@@ -2,7 +2,7 @@
 Project for the Complex System Simulation course in the UvA Master Computational Science.
 
 ## Why Power Laws? An Explanation from Fine-Grained Code Changes
-Abstract Syntax Tree 
+Abstract Syntax Tree
 
 Evolution of Software
 
@@ -23,3 +23,10 @@ Answer: method S is chosen as the caller with probability proportional to the si
 #### Ideas
 Code decay -> fitness decrease over time?
 Question: why?
+
+#### RUNNING the code:
+<> optional arguments (and default values)
+python run.py <iterations=1000> <gen_java_files=False>
+
+#### Comments
+\# Hoofdletter, geen punt

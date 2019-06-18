@@ -71,6 +71,7 @@ class code_dev_simulation():
             self.classes.append(java_class)
             for java_element in java_class.body:
                 if isinstance(java_element, MethodDeclaration):
+                    # Add node and give it a fitness
                     self.reference_graph.add_node(java_element.name, {'method': java_element, 'class': java_class, 'fitness': self.get_fitness()})
 
     def get_fitness(self):
@@ -88,7 +89,20 @@ class code_dev_simulation():
 
         Uses probabilities dictionary to determine which function to use
         """
+
         pass
+        # # Generate random number to determine which function to use
+        # probability = np.random.random()
+        # function_picker = 0
+        #
+        # for method in self.probabilities:
+        #     # Get chance that belongs to the next function
+        #     function_picker += self.probabilities[method]
+        #
+        #     if probability < function_picker:
+        #         # Execute the function
+        #         self.probabilities[method]()
+
 
 
     def create_method(self):
@@ -105,7 +119,7 @@ class code_dev_simulation():
             The number of changes made
 
         TODO:
-            - Should a statement automatically be created when a method is created? 
+            - Should a statement automatically be created when a method is created?
               Consistent empty method creation does not make much sense
         """
         pass
@@ -113,7 +127,7 @@ class code_dev_simulation():
     def call_method(self):
         """
         Sample two random functions from the reference graph and use them to determine a caller and callee
-        Use AST class to create a reference: 
+        Use AST class to create a reference:
             AST.create_reference(
                 caller method, callee method, callee class
             )       returns: the new reference (does not have to be used)
@@ -140,7 +154,7 @@ class code_dev_simulation():
 
     def remove_method(self, method=None):
         """
-        Deletes a method and deletes the method call from its callers. 
+        Deletes a method and deletes the method call from its callers.
         If a caller becomes empty after deleting the method, delete the caller as well and the deletion propagates
 
         References graph can be used to determine the references and they can be deleted using the AST class:
@@ -160,8 +174,8 @@ class code_dev_simulation():
         """
         Create class using AST:
             AST.create_class()      returns: Newly created class
-        
-        Returns: 
+
+        Returns:
             Created class
         """
         pass

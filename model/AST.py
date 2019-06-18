@@ -1,6 +1,6 @@
 from plyj.model import MethodDeclaration, ClassDeclaration, Type, Name,\
-                        MethodInvocation, ExpressionStatement, VariableDeclaration,\
-                        Variable, Literal, VariableDeclarator
+                        MethodInvocation, VariableDeclaration, Variable,\
+                        Literal, VariableDeclarator, ExpressionStatement
 
 class AST:
     """
@@ -93,12 +93,14 @@ class AST:
 
         Returns: void
         """
+
         # Add all statements that have the correct name and class
         to_delete = [stmt for stmt in caller_method.body
                      if isinstance(stmt, ExpressionStatement) and
                         isinstance(stmt.expression, MethodInvocation) and
                         stmt.expression.name == callee_method.name and
                         stmt.expression.target.value == callee_class.name]
+
         # Delete all correct references
         for stmt in to_delete:
             caller_method.body.remove(stmt)
@@ -112,6 +114,7 @@ class AST:
 
         Returns: void
         """
+
         stmt = self.create_statement()
         method.body.append(stmt)
 
@@ -125,6 +128,7 @@ class AST:
         var = VariableDeclaration(
             # Create int
             type='int',
+
             # Declarate a variable with name counter and initialise with value counter
             variable_declarators=[VariableDeclarator(
                     variable=Variable(
