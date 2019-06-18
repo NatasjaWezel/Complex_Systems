@@ -30,3 +30,6 @@ python run.py <iterations=1000> <gen_java_files=False>
 
 #### Comments
 \# Hoofdletter, geen punt
+
+#### REMEMBER
+PLYJ model.py van github halen, oude versie installed door pip is niet goed!
