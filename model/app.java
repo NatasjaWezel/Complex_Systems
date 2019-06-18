@@ -4,6 +4,6 @@
  */
 public class App {
     public static void main( String[] args ) {
-        System.out.println("Unfortunately no complexity yet!");
+        System.out.println("Unfortunately no power laws yet!");
     }
 }

@@ -103,6 +103,10 @@ class code_dev_simulation():
 
         Returns:
             The number of changes made
+
+        TODO:
+            - Should a statement automatically be created when a method is created? 
+              Consistent empty method creation does not make much sense
         """
         pass
 
@@ -155,7 +159,7 @@ class code_dev_simulation():
     def create_class(self):
         """
         Create class using AST:
-            AST.create_class(None)      returns: Newly created class
+            AST.create_class()      returns: Newly created class
         
         Returns: 
             Created class
