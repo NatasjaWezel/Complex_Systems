@@ -13,7 +13,7 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_ITERATIONS = 1000
+DEFAULT_ITERATIONS = 10000
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 PROBABILITIES = {
@@ -74,14 +74,14 @@ def gather_results(model, generate_files):
 def create_outputfile(model):
     """
     Writes an output file with one row per simulation step
-    Columns are 'step', 'fmin',
+    Columns are 'step', 'fmin', 'action'
 
     """
 
     # Create folder
     os.makedirs('results', exist_ok=True)
     # Create file
-    with open('results/result_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv',
+    with open('results/result_' + str(FITNESS_METHOD) + '_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv',
               mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
