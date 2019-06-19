@@ -5,7 +5,7 @@ import pandas as pd
 from os import path
 
 # Specific imports
-from plyj.model import MethodDeclaration, VariableDeclaration
+from plyj.model import MethodDeclaration, VariableDeclaration, MethodInvocation, ExpressionStatement
 from plyj.parser import Parser
 from networkx import DiGraph
 
@@ -103,6 +103,7 @@ class code_dev_simulation():
         delta_change = 0
 
         while delta_change == 0:
+            action = self.sample(self.possible_actions, self.get_probabilities())
             delta_change = action()
 
         self.store_fitness()
@@ -133,8 +134,7 @@ class code_dev_simulation():
               Consistent empty method creation does not make much sense
         """
         if np.random.random() <= self.probabilities['create_class']:
-            return 0
-            # selected_class = self.create_class()
+            selected_class = self.create_class()
         else:
             n_methods = self.get_method_amounts()
             probabilities = list(np.array(n_methods)/np.sum(n_methods))
@@ -155,7 +155,7 @@ class code_dev_simulation():
         Set a new fitness for the caller method
         Then add a new edge from the caller to the callee in the reference graph
 
-        A method does not call itself
+        A method does not call itself, and does not call another method twice
 
         Returns:
             The number of changes made
@@ -169,21 +169,67 @@ class code_dev_simulation():
             methods.append(data)
             sizes.append(len(data['method'].body))
 
+        sizes = [1 if s == 0 else s for s in sizes]
         in_degrees = [1 if s == 0 else s for s in in_degrees]
         caller_method_probabilities = list(np.array(sizes)/np.sum(sizes))
         callee_method_probabilities = list(np.array(in_degrees)/np.sum(in_degrees))
         caller_info = self.sample(methods, caller_method_probabilities)
         callee_info = self.sample(methods, callee_method_probabilities)
-        if caller_info['method'].name == callee_info['method'].name:
-            if len(methods) > 1:
-                self.call_method()
-            return
+
+        callee_info = self.find_callee(caller_info, callee_info, methods, callee_method_probabilities, sizes, in_degrees)
+        if callee_info == None:
+            return 0
+
         self.AST.create_reference(
             caller_info['method'], callee_info['method'], callee_info['class']
         )
+
         caller_info['fitness'] = self.get_fitness()
         self.reference_graph.add_edge(caller_info['method'].name, callee_info['method'].name)
         return 1
+
+    def call_exists(self, callee_method, caller_method):
+        """
+        Checks whether a call to callee is already being made in the caller
+
+        Returns: (bool) True if a call is already being made
+        """
+        callee_class = callee_method['class']
+        callee_method = callee_method['method']
+        caller_method = caller_method['method']
+        for stmt in caller_method.body:
+            if isinstance(stmt, ExpressionStatement) and\
+                        isinstance(stmt.expression, MethodInvocation) and\
+                        stmt.expression.name == callee_method.name and\
+                        stmt.expression.target.value == callee_class.name:
+                return True
+        return False
+
+    def find_callee(self, caller_info, callee_info, methods, callee_method_probabilities, sizes, in_degrees):
+        """
+        Find a method to call that is not equal to the caller and has not been called by the caller already
+
+        Args:
+            caller_info: caller function node
+            callee_info: callee function node
+            methods (list): list of all the available methods to call
+            callee_method_probabilities (list<float>): Probabilities for every function to be called
+            sizes (list<int>): List of all sizes of methods
+            in_degrees (list<int>): List of all the references a method has
+
+        Returns:
+            Callee method or None if no methods available
+        """
+        while caller_info['method'].name == callee_info['method'].name or self.call_exists(callee_info, caller_info):
+            callee_info = self.sample(methods, callee_method_probabilities)
+            callee_method_probabilities.pop(methods.index(callee_info))
+            sizes.pop(methods.index(callee_info))
+            in_degrees.pop(methods.index(callee_info))
+            callee_method_probabilities = list(np.array(in_degrees)/np.sum(in_degrees))
+            methods.remove(callee_info)
+            if len(methods) == 0:
+                return None
+        return callee_info
 
     def update_method(self):
         """
@@ -202,7 +248,8 @@ class code_dev_simulation():
         TODO:
             - Design conditions to add or delete statements
         """
-        method = self.pick_unfit_method()
+        node = self.pick_unfit_method()
+        method = node['method']
         if np.random.random() <= 0.5:
             self.AST.add_statement(method)
             self.reference_graph.nodes(data=method)[0][1]['lines'] += 1
@@ -235,7 +282,7 @@ class code_dev_simulation():
         else:
             return None
 
-    def remove_method(self, method=None):
+    def remove_method(self, node=None):
         """
         Deletes a method and deletes the method call from its callers.
         If a caller becomes empty after deleting the method, delete the caller as well and the deletion propagates
@@ -247,12 +294,46 @@ class code_dev_simulation():
         Remove the method node from the reference graph
 
         Args:
-            method: The method to be deleted. If None, choose one using pick_unfit_method
+            node: The method node to be deleted. If None, choose one using pick_unfit_method
         Returns:
             The number of changes made
+
+        TODO:
+            Remove empty classes after removing methods too?
         """
-        # print("remove a method")
-        pass
+        change_size = 0
+        if len(self.reference_graph.nodes()) == 1:
+            return 0
+        if node is None:
+            node = self.pick_unfit_method()
+
+        method_info = node
+        method = node['method'].name
+        class_node = node['class']
+
+        void_callers = []
+        for caller in self.reference_graph.predecessors_iter(method):
+            if caller != method:
+                # Get the caller and delete the reference
+                caller_info = self.reference_graph.node[caller]
+                caller_node = caller_info['method']
+                self.AST.delete_reference(caller_node, method_info['method'], class_node)
+                # If the caller has become empty, add it to the queue to delete later
+                if len(caller_node.body) == 0:
+                    void_callers.append(caller)
+                else:
+                    # Otherwise change its fitness
+                    caller_info['fitness'] = self.get_fitness()
+                    change_size += 1
+        # Delete the method after deleting all the invocation statements
+        self.AST.delete_method(class_node, method_info['method'])
+        self.reference_graph.remove_node(method)
+        change_size += 1
+
+        # Then recursively do the same for all the methods that have become empty in the process
+        for caller in void_callers:
+            change_size += self.remove_method(self.get_node_data(caller))
+        return change_size
 
     def create_class(self):
         """
@@ -262,8 +343,9 @@ class code_dev_simulation():
         Returns:
             Created class
         """
-        # print("create a new class")
-        pass
+        class_node = self.AST.create_class()
+        self.classes.append(class_node)
+        return class_node
 
     def pick_unfit_method(self):
         """
@@ -284,7 +366,20 @@ class code_dev_simulation():
             fitness = node_data['fitness']
             if fitness < method_fitness[1]:
                 method_fitness = (node_data, fitness)
-        return method_fitness[0]['method']
+        return method_fitness[0]
+
+    def get_node_data(self, node):
+        """
+        Return node data from the reference graph
+
+        Args:
+            node (string): The name of the node to return the data of
+
+        Returns:
+            Data of the node defined in the reference graph
+        """
+        nodes_dict = dict(self.reference_graph.nodes(data=True))
+        return nodes_dict[node]
 
     def sample(self, elements, probalities):
         """
@@ -312,7 +407,6 @@ class code_dev_simulation():
                 if isinstance(java_element, MethodDeclaration):
                     n_methods += 1
             class_n_methods.append(n_methods)
-
         return class_n_methods
 
     def get_probabilities(self):
