@@ -44,6 +44,7 @@ def run_repo_model():
 
     gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
     gather_results(model, gen)
+    create_outputfile(model)
 
 def gather_results(model, generate_files):
     """
@@ -67,6 +68,27 @@ def gather_results(model, generate_files):
             class_info.accept(java_printer)
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
+
+def create_outputfile(model):
+    """
+    Writes an output file with one row per simulation step
+    Columns are 'step', 'fmin',
+
+    """
+
+    # Create folder
+    os.makedirs('results', exist_ok=True)
+    # Create file
+    with open('results/result_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv',
+              mode='w', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        # Header
+        writer.writerow(['step', 'fmin'])
+
+        # Write rows
+        for row in range(len(model.list_fmin)):
+            writer.writerow([row, model.list_fmin[row]])
+
 
 if __name__ == "__main__":
     run_repo_model()
