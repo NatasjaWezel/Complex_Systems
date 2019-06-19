@@ -53,6 +53,9 @@ class code_dev_simulation():
         self.classes = []
         self.get_tree()
 
+        # Analysis lists
+        self.list_fmin = []
+
     def get_tree(self):
         """
         Parse a .java file and get its declarations, then initialise the references
@@ -83,6 +86,8 @@ class code_dev_simulation():
         """
         Gets fitness based on fitness method
 
+
+
         fitness_method == 0: returns random number between 0 and 1 (uniform distribution)
         """
         if self.fitness_method == 0:
@@ -110,6 +115,9 @@ class code_dev_simulation():
             delta_change = action()
 
         self.store_fitness()
+
+        # Analyses
+        self.list_fmin.append(self.get_fmin())
 
         return delta_change
 
@@ -149,6 +157,9 @@ class code_dev_simulation():
 
         # Add statement(s) based on probability to new method here? It is created empty
 
+        # Method created and class created/modified
+        return 2
+
     def call_method(self):
         """
         Sample two random functions from the reference graph and use them to determine a caller and callee
@@ -173,8 +184,8 @@ class code_dev_simulation():
             methods.append(data)
             sizes.append(len(data['method'].body))
 
-        sizes = [1 if s == 0 else s for s in sizes]
-        in_degrees = [1 if s == 0 else s for s in in_degrees]
+        sizes = [1 if s == 0 else s+1 for s in sizes]
+        in_degrees = [1 if s == 0 else s+1 for s in in_degrees]
         caller_method_probabilities = list(np.array(sizes)/np.sum(sizes))
         callee_method_probabilities = list(np.array(in_degrees)/np.sum(in_degrees))
         caller_info = self.sample(methods, caller_method_probabilities)
@@ -372,6 +383,26 @@ class code_dev_simulation():
             if fitness < method_fitness[1]:
                 method_fitness = (node_data, fitness)
         return method_fitness[0]
+
+    def get_fmin(self):
+        """
+        copy of pick_unfit_method
+        Currently selects the method with lowest fitness
+
+        Returns:
+            method
+
+        TODO:
+            Redesign fitness metric to base sampling on
+        """
+        method_fitness = ('empty', 2)
+        nodes_dict = dict(self.reference_graph.nodes(data=True))
+        for method_node in self.reference_graph.__iter__():
+            node_data = nodes_dict[method_node]
+            fitness = node_data['fitness']
+            if fitness < method_fitness[1]:
+                method_fitness = (node_data, fitness)
+        return method_fitness[1]
 
     def get_node_data(self, node):
         """
