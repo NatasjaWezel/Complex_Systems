@@ -28,6 +28,8 @@ class code_dev_simulation():
     TODO:
         - Implement all unimplemented functions
         - Determine metric for pick_unfit_method
+        - Determine better fitness metric, maybe based on amount of lines in a method
+        - Keep track of fitness during simulation
     """
     def __init__(self, iterations, fitness_method, probabilities):
         # params
@@ -297,9 +299,6 @@ class code_dev_simulation():
             node: The method node to be deleted. If None, choose one using pick_unfit_method
         Returns:
             The number of changes made
-
-        TODO:
-            Remove empty classes after removing methods too?
         """
         change_size = 0
         if len(self.reference_graph.nodes()) == 1:
@@ -328,6 +327,8 @@ class code_dev_simulation():
         # Delete the method after deleting all the invocation statements
         self.AST.delete_method(class_node, method_info['method'])
         self.reference_graph.remove_node(method)
+        if len(class_node.body) == 0:
+            self.classes.remove(class_node)
         change_size += 1
 
         # Then recursively do the same for all the methods that have become empty in the process

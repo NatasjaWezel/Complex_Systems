@@ -57,6 +57,10 @@ def gather_results(model, generate_files):
         - Test implementation of java file generation
     """
     if (generate_files):
+        if os.path.exists('output'):
+            for root, _, files in os.walk('output'):
+                for name in files:
+                    os.remove(os.path.join(root, name))
         os.makedirs('output/src', exist_ok=True)
         for class_info in model.classes:
             java_printer = JavaPrinter()
