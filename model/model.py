@@ -56,6 +56,8 @@ class code_dev_simulation():
         # Analysis lists
         self.list_fmin = []
         self.list_action = []
+        self.list_fitnesses = []
+        self.list_fit_stats = []
 
     def get_tree(self):
         """
@@ -120,6 +122,9 @@ class code_dev_simulation():
         # Analyses
         self.list_fmin.append(self.get_fmin())
         self.list_action.append(action.__name__)
+        fitnesses = self.get_fitnesses()
+        # self.list_fitnesses.append(fitnesses)
+        self.list_fit_stats.append(self.fitness_stats(fitnesses))
 
         return delta_change
 
@@ -239,8 +244,8 @@ class code_dev_simulation():
         Returns:
             Callee method or None if no methods available
         """
-        while caller_info['method'].name == callee_info['method'].name:
-        # while caller_info['method'].name == callee_info['method'].name or self.call_exists(callee_info,caller_info):
+        # while caller_info['method'].name == callee_info['method'].name:
+        while caller_info['method'].name == callee_info['method'].name or self.call_exists(callee_info,caller_info):
 
             callee_info = self.sample(methods, callee_method_probabilities)
             callee_method_probabilities.pop(methods.index(callee_info))
@@ -281,7 +286,8 @@ class code_dev_simulation():
             if stmt:
                 self.AST.delete_statement(method, stmt)
                 self.reference_graph.nodes(data=method)[0][1]['lines'] -= 1 if self.reference_graph.nodes(data=method)[0][1]['lines'] > 0 else 0
-        self.reference_graph.nodes(data=method)[0][1]['fitness'] = self.get_fitness()
+        # self.reference_graph.nodes(data=method)[0][1]['fitness'] = self.get_fitness()
+        self.reference_graph.node[node['method'].name]['fitness'] = self.get_fitness()
         return 1
 
     def pick_statement(self, method):
@@ -395,11 +401,7 @@ class code_dev_simulation():
         copy of pick_unfit_method
         Currently selects the method with lowest fitness
 
-        Returns:
-            method
-
-        TODO:
-            Redesign fitness metric to base sampling on
+        returns fmin
         """
         method_fitness = ('empty', 2)
         nodes_dict = dict(self.reference_graph.nodes(data=True))
@@ -465,3 +467,23 @@ class code_dev_simulation():
             self.probabilities['update_method'],
             self.probabilities['delete_method']
         ]
+
+    def get_fitnesses(self):
+        """
+        copy of pick_unfit_method
+        Currently selects the method with lowest fitness
+
+        Returns:
+            list of fitnesses
+
+        """
+        nodes_dict = dict(self.reference_graph.nodes(data=True))
+        return [nodes_dict[method_node]['fitness'] for method_node in self.reference_graph.__iter__()]
+
+    def fitness_stats(self, fitnesses):
+        """
+        Gets list of fitnesses of the methods as input
+        Returns a list of mean, std, min, max values
+        """
+        fitnesses = np.array(fitnesses)
+        return [len(fitnesses), fitnesses.mean(), fitnesses.std(), fitnesses.min(), fitnesses.max()]

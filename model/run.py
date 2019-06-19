@@ -13,7 +13,7 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_ITERATIONS = 10000
+DEFAULT_ITERATIONS = 100000
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 PROBABILITIES = {
@@ -85,11 +85,11 @@ def create_outputfile(model):
               mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
-        writer.writerow(['step', 'fmin', 'action'])
+        writer.writerow(['step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'])
 
         # Write rows
         for row in range(len(model.list_fmin)):
-            writer.writerow([row, model.list_fmin[row], model.list_action[row]])
+            writer.writerow([row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
 
 
 if __name__ == "__main__":
