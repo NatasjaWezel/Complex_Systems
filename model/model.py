@@ -147,10 +147,12 @@ class code_dev_simulation():
         """
         if np.random.random() <= self.probabilities['create_class']:
             selected_class = self.create_class()
+            changes = 2
         else:
             n_methods = self.get_method_amounts()
             probabilities = list(np.array(n_methods)/np.sum(n_methods))
             selected_class = self.sample(self.classes, probabilities)
+            changes = 1
         method = self.AST.create_method(selected_class)
         fitness = self.get_fitness()
         self.reference_graph.add_node(method.name, {'method': method, 'class': selected_class, 'fitness': fitness, 'lines': 0})
@@ -158,7 +160,7 @@ class code_dev_simulation():
         # Add statement(s) based on probability to new method here? It is created empty
 
         # Method created and class created/modified
-        return 2
+        return changes
 
     def call_method(self):
         """
