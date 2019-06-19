@@ -106,3 +106,6 @@ venv.bak/
 # Result folders
 repo_[0-9]*/
 model/output/*
+model/results/*
+
+.idea/*

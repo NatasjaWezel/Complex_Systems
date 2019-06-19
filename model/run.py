@@ -10,8 +10,10 @@ import os
 # Custom imports
 from model import code_dev_simulation
 from java_printer import JavaPrinter
+import csv
+import datetime
 
-DEFAULT_ITERATIONS = 1000
+DEFAULT_ITERATIONS = 100000
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 PROBABILITIES = {
@@ -44,6 +46,7 @@ def run_repo_model():
 
     gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
     gather_results(model, gen)
+    create_outputfile(model)
 
 def gather_results(model, generate_files):
     """
@@ -67,6 +70,27 @@ def gather_results(model, generate_files):
             class_info.accept(java_printer)
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
+
+def create_outputfile(model):
+    """
+    Writes an output file with one row per simulation step
+    Columns are 'step', 'fmin', 'action'
+
+    """
+
+    # Create folder
+    os.makedirs('results', exist_ok=True)
+    # Create file
+    with open('results/result_' + str(FITNESS_METHOD) + '_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv',
+              mode='w', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        # Header
+        writer.writerow(['step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'])
+
+        # Write rows
+        for row in range(len(model.list_fmin)):
+            writer.writerow([row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
+
 
 if __name__ == "__main__":
     run_repo_model()
