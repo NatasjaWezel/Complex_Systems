@@ -5,8 +5,9 @@ import pandas as pd
 from os import path
 
 # Specific imports
-from plyj_model import MethodDeclaration, VariableDeclaration, MethodInvocation, ExpressionStatement
-from parser import Parser
+from plyj.model import MethodDeclaration, VariableDeclaration, MethodInvocation, ExpressionStatement
+from plyj.parser import Parser
+
 from networkx import DiGraph
 
 # Model class imports

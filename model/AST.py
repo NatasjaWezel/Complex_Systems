@@ -1,4 +1,4 @@
-from plyj_model import MethodDeclaration, ClassDeclaration, Type, Name,\
+from plyj.model import MethodDeclaration, ClassDeclaration, Type, Name,\
                         MethodInvocation, VariableDeclaration, Variable,\
                         Literal, VariableDeclarator, ExpressionStatement
 
