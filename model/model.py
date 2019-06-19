@@ -134,6 +134,7 @@ class code_dev_simulation():
         TODO:
             - Should a statement automatically be created when a method is created?
               Consistent empty method creation does not make much sense
+            - But it also doesn't really matter what's in the method right?
         """
         if np.random.random() <= self.probabilities['create_class']:
             selected_class = self.create_class()
@@ -249,6 +250,8 @@ class code_dev_simulation():
 
         TODO:
             - Design conditions to add or delete statements
+            - Think the chance to add a statement should be higher, since repos
+            - grow?
         """
         node = self.pick_unfit_method()
         method = node['method']
