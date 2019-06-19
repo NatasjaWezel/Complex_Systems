@@ -255,7 +255,7 @@ class code_dev_simulation():
         """
         node = self.pick_unfit_method()
         method = node['method']
-        if np.random.random() <= 0.5:
+        if np.random.random() <= 1:
             self.AST.add_statement(method)
             self.reference_graph.nodes(data=method)[0][1]['lines'] += 1
         else:
