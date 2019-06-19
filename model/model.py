@@ -55,6 +55,7 @@ class code_dev_simulation():
 
         # Analysis lists
         self.list_fmin = []
+        self.list_action = []
 
     def get_tree(self):
         """
@@ -118,6 +119,7 @@ class code_dev_simulation():
 
         # Analyses
         self.list_fmin.append(self.get_fmin())
+        self.list_action.append(action.__name__)
 
         return delta_change
 

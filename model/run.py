@@ -10,6 +10,8 @@ import os
 # Custom imports
 from model import code_dev_simulation
 from java_printer import JavaPrinter
+import csv
+import datetime
 
 DEFAULT_ITERATIONS = 1000
 # fitness method = 0 -> uniform distribution
@@ -83,11 +85,11 @@ def create_outputfile(model):
               mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
-        writer.writerow(['step', 'fmin'])
+        writer.writerow(['step', 'fmin', 'action'])
 
         # Write rows
         for row in range(len(model.list_fmin)):
-            writer.writerow([row, model.list_fmin[row]])
+            writer.writerow([row, model.list_fmin[row], model.list_action[row]])
 
 
 if __name__ == "__main__":
