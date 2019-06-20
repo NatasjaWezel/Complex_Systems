@@ -13,11 +13,11 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_SIMULATIONS = 10
-DEFAULT_ITERATIONS = 10**1 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 100
+DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-EXP_CONDITION = 'no_rec' # reproduce (recursion/multiple calls possible), 'no_rec' ...
+EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec' ...
 PROBABILITIES = {
     'create_method': 0.1,
     'call_method': 0.4,
@@ -40,7 +40,11 @@ def run_repo_model():
     assert (EXP_CONDITION in ['reproduce', 'no_rec'])
 
     # Create the output file
-    filename = create_outputfile()
+    filename = create_outputfile(iterations)
+    print('Going to run {} simulations, with condition: {}, fitness method: {} and number of steps: {}'.format(simulations,
+                                                                                                               EXP_CONDITION,
+                                                                                                               FITNESS_METHOD,
+                                                                                                               iterations))
 
     for sim in range(simulations):
         print('Simulation {} of {}'.format(sim+1, simulations))
@@ -83,7 +87,7 @@ def gather_results(model, generate_files):
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
 
-def create_outputfile():
+def create_outputfile(iterations):
     """
     Creates an output file with the header, returns filename
     Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax', 'code_size', 'changes'
@@ -94,7 +98,7 @@ def create_outputfile():
     # Create folder
     os.makedirs('results', exist_ok=True)
     # Create file
-    filename = 'results/result_' + str(EXP_CONDITION) + '_' + str(FITNESS_METHOD) + '_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
+    filename = 'results/result_' + str(EXP_CONDITION) + '_fit' + str(FITNESS_METHOD) + '_its' + str(iterations) + '_time' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
     with open(filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
