@@ -13,11 +13,11 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_SIMULATIONS = 10
-DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 100
+DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-EXP_CONDITION = 'no_rec' # replicate, no_rec (no recursion/multiple calls), ...
+EXP_CONDITION = 'no_rec' # reproduce (recursion/multiple calls possible), 'no_rec' ...
 PROBABILITIES = {
     'create_method': 0.1,
     'call_method': 0.4,
@@ -37,13 +37,15 @@ def run_repo_model():
 
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
     simulations = int(sys.argv[3]) if len(sys.argv) > 1 else DEFAULT_SIMULATIONS
+    assert (EXP_CONDITION in ['reproduce', 'no_rec'])
 
+    # Create the output file
     filename = create_outputfile()
 
     for sim in range(simulations):
-        print('Simulation {}'.format(sim))
+        print('Simulation {} of {}'.format(sim+1, simulations))
 
-        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES)
+        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES, EXP_CONDITION)
 
         print('Model instantiated...\n')
 
@@ -56,7 +58,7 @@ def run_repo_model():
 
         gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
         gather_results(model, gen)
-        append_outputfile(model, sim, filename)
+        filename = append_outputfile(model, sim, filename)
 
 def gather_results(model, generate_files):
     """
@@ -103,17 +105,31 @@ def create_outputfile():
 def append_outputfile(model, sim, filename):
     """
     Appends results from a simulation to the output file with one row per simulation step
+    Creates new file if there is a memory error
+
     Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'
 
+    Returns filename
     """
+    try:
+        # Open file
+        with open(filename, mode='a', newline='') as csv_file:
+            writer = csv.writer(csv_file, delimiter=',')
+            # Write rows
+            for row in range(len(model.list_fmin)):
+                writer.writerow([sim, row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
 
-    # Create file
-    with open(filename, mode='a', newline='') as csv_file:
-        writer = csv.writer(csv_file, delimiter=',')
-        # Write rows
-        for row in range(len(model.list_fmin)):
-            writer.writerow([sim, row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
+    # Create new file if there is a memoryerror and add entire simulation results
+    except MemoryError:
+        filename = create_outputfile()
+        # Open file
+        with open(filename, mode='a', newline='') as csv_file:
+            writer = csv.writer(csv_file, delimiter=',')
+            # Write rows
+            for row in range(len(model.list_fmin)):
+                writer.writerow([sim, row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
 
+    return filename
 
 if __name__ == "__main__":
     run_repo_model()

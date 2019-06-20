@@ -32,11 +32,12 @@ class code_dev_simulation():
         - Determine better fitness metric, maybe based on amount of lines in a method
         - Keep track of fitness during simulation
     """
-    def __init__(self, iterations, fitness_method, probabilities):
+    def __init__(self, iterations, fitness_method, probabilities, exp_condition):
         # params
         self.iterations = iterations
         self.fitness_method = fitness_method
         self.probabilities = probabilities
+        self.exp_condition = exp_condition
 
         # initialisations
         self.running = True
@@ -88,8 +89,6 @@ class code_dev_simulation():
     def get_fitness(self):
         """
         Gets fitness based on fitness method
-
-
 
         fitness_method == 0: returns random number between 0 and 1 (uniform distribution)
         """
@@ -200,8 +199,10 @@ class code_dev_simulation():
         caller_info = self.sample(methods, caller_method_probabilities)
         callee_info = self.sample(methods, callee_method_probabilities)
 
-        callee_info = self.find_callee(caller_info, callee_info, methods, callee_method_probabilities, sizes, in_degrees)
-        if callee_info == None:
+        if self.exp_condition != 'reproduce':
+            callee_info = self.find_callee(caller_info, callee_info, methods, callee_method_probabilities, sizes,
+                                           in_degrees)
+        if callee_info is None:
             return 0
 
         self.AST.create_reference(
