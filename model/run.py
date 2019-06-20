@@ -85,11 +85,11 @@ def create_outputfile(model):
               mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
-        writer.writerow(['step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'])
+        writer.writerow(['step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax', 'code_size', 'changes'])
 
         # Write rows
         for row in range(len(model.list_fmin)):
-            writer.writerow([row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
+            writer.writerow([row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row] + [model.total_code_size[row]] + [model.changes[row]])
 
 
 if __name__ == "__main__":

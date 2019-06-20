@@ -27,10 +27,8 @@ class code_dev_simulation():
         probabilities (dict<string, int>): Maps probability to a certain function
 
     TODO:
-        - Implement all unimplemented functions
         - Determine metric for pick_unfit_method
         - Determine better fitness metric, maybe based on amount of lines in a method
-        - Keep track of fitness during simulation
     """
     def __init__(self, iterations, fitness_method, probabilities):
         # params
@@ -58,6 +56,7 @@ class code_dev_simulation():
         self.list_action = []
         self.list_fitnesses = []
         self.list_fit_stats = []
+        self.total_code_size = []
 
     def get_tree(self):
         """
@@ -89,8 +88,6 @@ class code_dev_simulation():
         """
         Gets fitness based on fitness method
 
-
-
         fitness_method == 0: returns random number between 0 and 1 (uniform distribution)
         """
         if self.fitness_method == 0:
@@ -117,22 +114,22 @@ class code_dev_simulation():
             action = self.sample(self.possible_actions, self.get_probabilities())
             delta_change = action()
 
-        self.store_fitness()
-
-        # Analyses
-        self.list_fmin.append(self.get_fmin())
-        self.list_action.append(action.__name__)
-        fitnesses = self.get_fitnesses()
-        # self.list_fitnesses.append(fitnesses)
-        self.list_fit_stats.append(self.fitness_stats(fitnesses))
+        self.save_states(action)
 
         return delta_change
 
-    def store_fitness(self):
+    def save_states(self, action):
         """
-        Append fitness of all elements in self.fitness
+        Saves the state of the model every step
+
+        Args:
+            action (function): The function that is called this step
         """
-        pass
+        self.list_fmin.append(self.get_fmin())
+        self.list_action.append(action.__name__)
+        fitnesses = self.get_fitnesses()
+        self.list_fit_stats.append(self.fitness_stats(fitnesses))
+        self.total_code_size.append(self.get_total_code_size())
 
     def create_method(self):
         """
@@ -489,3 +486,10 @@ class code_dev_simulation():
         """
         fitnesses = np.array(fitnesses)
         return [len(fitnesses), fitnesses.mean(), fitnesses.std(), fitnesses.min(), fitnesses.max()]
+
+    def get_total_code_size(self):
+        """
+        Save the total code base size (total amount of method lines) by summing the lines of each method
+        """
+        nodes_dict = dict(self.reference_graph.nodes(data=True))
+        return sum([nodes_dict[method_node]['lines'] for method_node in self.reference_graph.__iter__()])
