@@ -13,9 +13,11 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_ITERATIONS = 100000
+DEFAULT_SIMULATIONS = 10
+DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
+EXP_CONDITION = 'no_rec' # replicate, no_rec (no recursion/multiple calls), ...
 PROBABILITIES = {
     'create_method': 0.1,
     'call_method': 0.4,
@@ -30,23 +32,31 @@ def run_repo_model():
 
     Argument 1 (int): Amount of iterations to run model
     Argument 2 (bool): Whether to generate the java files created during the simulation
+    Argument 3 (int): Amount of simulations of the model to run
     """
 
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
-    model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES)
+    simulations = int(sys.argv[3]) if len(sys.argv) > 1 else DEFAULT_SIMULATIONS
 
-    print('Model instantiated...\n')
+    filename = create_outputfile()
 
-    print('Running model...')
+    for sim in range(simulations):
+        print('Simulation {}'.format(sim))
 
-    start_time = time.time()
-    model.run_model()
+        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES)
 
-    print('Model run completed..!\nTook {} seconds.\n'.format(time.time() - start_time))
+        print('Model instantiated...\n')
 
-    gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
-    gather_results(model, gen)
-    create_outputfile(model)
+        print('Running model...')
+
+        start_time = time.time()
+        model.run_model()
+
+        print('Model run completed..!\nTook {} seconds.\n'.format(time.time() - start_time))
+
+        gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
+        gather_results(model, gen)
+        append_outputfile(model, sim, filename)
 
 def gather_results(model, generate_files):
     """
@@ -71,25 +81,38 @@ def gather_results(model, generate_files):
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
 
-def create_outputfile(model):
+def create_outputfile():
     """
-    Writes an output file with one row per simulation step
-    Columns are 'step', 'fmin', 'action'
+    Creates an output file with the header, returns filename
+    Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'
 
+    return filename
     """
 
     # Create folder
     os.makedirs('results', exist_ok=True)
     # Create file
-    with open('results/result_' + str(FITNESS_METHOD) + '_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv',
-              mode='w', newline='') as csv_file:
+    filename = 'results/result_' + str(EXP_CONDITION) + '_' + str(FITNESS_METHOD) + '_' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
+    with open(filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
-        writer.writerow(['step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'])
+        writer.writerow(['sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'])
 
+    return filename
+
+def append_outputfile(model, sim, filename):
+    """
+    Appends results from a simulation to the output file with one row per simulation step
+    Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax'
+
+    """
+
+    # Create file
+    with open(filename, mode='a', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
         # Write rows
         for row in range(len(model.list_fmin)):
-            writer.writerow([row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
+            writer.writerow([sim, row, model.list_fmin[row], model.list_action[row]] + model.list_fit_stats[row])
 
 
 if __name__ == "__main__":

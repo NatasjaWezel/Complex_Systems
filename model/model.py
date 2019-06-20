@@ -244,7 +244,6 @@ class code_dev_simulation():
         Returns:
             Callee method or None if no methods available
         """
-        # while caller_info['method'].name == callee_info['method'].name:
         while caller_info['method'].name == callee_info['method'].name or self.call_exists(callee_info,caller_info):
 
             callee_info = self.sample(methods, callee_method_probabilities)
