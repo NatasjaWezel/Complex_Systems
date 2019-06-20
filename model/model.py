@@ -209,6 +209,7 @@ class code_dev_simulation():
         )
 
         caller_info['fitness'] = self.get_fitness()
+        caller_info['lines'] += 1
         self.reference_graph.add_edge(caller_info['method'].name, callee_info['method'].name)
         return 1
 
@@ -280,12 +281,12 @@ class code_dev_simulation():
         method = node['method']
         if np.random.random() <= 1:
             self.AST.add_statement(method)
-            self.reference_graph.nodes(data=method)[0][1]['lines'] += 1
+            self.reference_graph.node[node['method'].name]['lines'] += 1
         else:
             stmt = self.pick_statement(method)
             if stmt:
                 self.AST.delete_statement(method, stmt)
-                self.reference_graph.nodes(data=method)[0][1]['lines'] -= 1 if self.reference_graph.nodes(data=method)[0][1]['lines'] > 0 else 0
+                self.reference_graph.node[node['method'].name]['lines'] -= 1 if self.reference_graph.node[node['method'].name]['lines'] > 0 else 0
         # self.reference_graph.nodes(data=method)[0][1]['fitness'] = self.get_fitness()
         self.reference_graph.node[node['method'].name]['fitness'] = self.get_fitness()
         return 1
@@ -350,6 +351,7 @@ class code_dev_simulation():
                 else:
                     # Otherwise change its fitness
                     caller_info['fitness'] = self.get_fitness()
+                    caller_info['lines'] -= 1
                     change_size += 1
         # Delete the method after deleting all the invocation statements
         self.AST.delete_method(class_node, method_info['method'])
