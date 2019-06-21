@@ -22,9 +22,10 @@ EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no
 PROBABILITIES = {
     'create_method': 0.1,
     'call_method': 0.4,
-    'update_method': 0.45,
+    'update_method': 0.42,
     'delete_method': 0.05,
-    'create_class': 0.1
+    'create_class': 0.1,
+    'batch_change': 0.03
 }
 
 def run_repo_model():

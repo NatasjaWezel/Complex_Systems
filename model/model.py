@@ -2,6 +2,7 @@
 # Standard imports
 import numpy as np
 import pandas as pd
+from scipy.stats import norm
 from os import path
 
 # Specific imports
@@ -41,7 +42,7 @@ class code_dev_simulation():
         # initialisations
         self.running = True
         self.step_n = 0
-        self.possible_actions = [self.create_method, self.call_method, self.update_method, self.remove_method]
+        self.possible_actions = [self.create_method, self.call_method, self.update_method, self.remove_method, self.batch_change]
         self.changes = []
         self.fitness = []
 
@@ -85,6 +86,12 @@ class code_dev_simulation():
             for java_element in java_class.body:
                 if isinstance(java_element, MethodDeclaration):
                     self.reference_graph.add_node(java_element.name, {'method': java_element, 'class': java_class, 'fitness': self.get_fitness(), 'lines': 0})
+
+    def batch_change(self):
+        self.remove_method()
+        for i in range(np.random.randint(0, high=10)):
+            self.update_method()
+        return 1
 
     def get_default_fitness(self):
         """
@@ -364,7 +371,7 @@ class code_dev_simulation():
         if len(self.reference_graph.nodes()) == 1:
             return 0
         if node is None:
-            node = self.pick_unfit_method()
+            node = self.pick_unfit_method('norm')
 
         method_info = node
         method = node['method'].name
@@ -409,7 +416,7 @@ class code_dev_simulation():
         self.classes.append(class_node)
         return class_node
 
-    def pick_unfit_method(self):
+    def pick_unfit_method(self, dist='exp'):
         """
         Picks a method based on its (low) fitness
 
@@ -421,14 +428,20 @@ class code_dev_simulation():
         TODO:
             Redesign fitness metric to base sampling on
         """
-        method_fitness = ('empty', 2)
+        lamda = 1
         nodes_dict = dict(self.reference_graph.nodes(data=True))
-        for method_node in self.reference_graph.__iter__():
-            node_data = nodes_dict[method_node]
-            fitness = node_data['fitness']
-            if fitness < method_fitness[1]:
-                method_fitness = (node_data, fitness)
-        return method_fitness[0]
+        sorted_array = [a[1] for a in sorted(nodes_dict.items(), key=lambda x: x[1]['fitness'])]
+        
+        if dist == 'exp':
+            x = np.linspace(0, 5, len(sorted_array))
+            dist = lamda * np.exp(-lamda * x)
+        else:
+            x = np.linspace(norm.ppf(0.01), norm.ppf(0.99), len(sorted_array))
+            dist = norm.pdf(x)
+
+        dist /= sum(dist)
+
+        return np.random.choice(sorted_array, p=dist)
 
     def get_fmin(self):
         """
@@ -499,7 +512,8 @@ class code_dev_simulation():
             self.probabilities['create_method'],
             self.probabilities['call_method'],
             self.probabilities['update_method'],
-            self.probabilities['delete_method']
+            self.probabilities['delete_method'],
+            self.probabilities['batch_change']
         ]
 
     def get_fitnesses(self):
