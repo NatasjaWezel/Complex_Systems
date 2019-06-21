@@ -8,6 +8,7 @@ from os import path
 from plyj.model import MethodDeclaration, VariableDeclaration, MethodInvocation, ExpressionStatement
 from plyj.parser import Parser
 
+import networkx as nx
 from networkx import DiGraph
 
 # Model class imports
@@ -85,14 +86,47 @@ class code_dev_simulation():
                 if isinstance(java_element, MethodDeclaration):
                     self.reference_graph.add_node(java_element.name, {'method': java_element, 'class': java_class, 'fitness': self.get_fitness(), 'lines': 0})
 
-    def get_fitness(self):
+    def get_default_fitness(self):
+        """
+        Initialise a fitness for a to be created node based on the total amount of methods
+        """
+        return 1 / max(len(self.reference_graph.nodes()), 1)
+
+    def get_fitness(self, node=None):
         """
         Gets fitness based on fitness method
 
         fitness_method == 0: returns random number between 0 and 1 (uniform distribution)
+        fitness_method == 1: returns probabilities based on page ranking and amount of method calls
         """
         if self.fitness_method == 0:
             return np.random.random()
+        elif self.fitness_method == 1:
+            if node == None:
+                return self.get_default_fitness()
+            pr = nx.pagerank(self.reference_graph, alpha=0.9, max_iter=500)
+            self.set_new_fitenesses(pr)
+            nodes_dict = dict(self.reference_graph.nodes(data=True))
+            return nodes_dict[node]['fitness']
+
+    def set_new_fitenesses(self, pr):
+        nodes_dict = dict(self.reference_graph.nodes(data=True))
+        line_weights = {}
+        for node in nodes_dict:
+            line_weights[node] = max(nodes_dict[node]['lines'], 1)
+
+        line_sum = max(sum(line_weights.values()), 1)
+
+        for node in line_weights:
+            line_weights[node] /= line_sum
+
+        stdev = 0.25
+        for node in pr.keys():
+            node_data = nodes_dict[node]
+            stdev_ = np.interp(line_weights[node], (min(line_weights.values()), max(line_weights.values())), (-stdev, stdev))
+            node_data['fitness'] = min(max(pr[node] + np.random.uniform(low=-stdev_, high=stdev_), 0), 1)
+            # dont delete pls (pr[node] + line_weights[node]) / 2
+
 
     def run_model(self):
         """
@@ -208,7 +242,7 @@ class code_dev_simulation():
             caller_info['method'], callee_info['method'], callee_info['class']
         )
 
-        caller_info['fitness'] = self.get_fitness()
+        caller_info['fitness'] = self.get_fitness(caller_info['method'].name)
         caller_info['lines'] += 1
         self.reference_graph.add_edge(caller_info['method'].name, callee_info['method'].name)
         return 1
@@ -286,8 +320,7 @@ class code_dev_simulation():
             if stmt:
                 self.AST.delete_statement(method, stmt)
                 self.reference_graph.node[node['method'].name]['lines'] -= 1 if self.reference_graph.node[node['method'].name]['lines'] > 0 else 0
-        # self.reference_graph.nodes(data=method)[0][1]['fitness'] = self.get_fitness()
-        self.reference_graph.node[node['method'].name]['fitness'] = self.get_fitness()
+        self.reference_graph.node[node['method'].name]['fitness'] = self.get_fitness(node['method'].name)
         return 1
 
     def pick_statement(self, method):
@@ -349,7 +382,7 @@ class code_dev_simulation():
                     void_callers.append(caller)
                 else:
                     # Otherwise change its fitness
-                    caller_info['fitness'] = self.get_fitness()
+                    caller_info['fitness'] = self.get_fitness(caller_info['method'].name)
                     caller_info['lines'] -= 1
                     change_size += 1
         # Delete the method after deleting all the invocation statements

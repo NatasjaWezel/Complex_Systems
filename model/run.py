@@ -16,7 +16,8 @@ import datetime
 DEFAULT_SIMULATIONS = 100
 DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
-FITNESS_METHOD = 0
+# fitness method = 1 -> Get fitness based on page rank and method calls
+FITNESS_METHOD = 1
 EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec' ...
 PROBABILITIES = {
     'create_method': 0.1,
@@ -62,7 +63,7 @@ def run_repo_model():
 
         gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
         gather_results(model, gen)
-        filename = append_outputfile_try(model, sim, filename)
+        filename = append_outputfile_try(model, sim, filename, iterations)
 
 def gather_results(model, generate_files):
     """
@@ -106,7 +107,7 @@ def create_outputfile(iterations):
 
     return filename
 
-def append_outputfile_try(model, sim, filename):
+def append_outputfile_try(model, sim, filename, iterations):
     """
     Appends results from a simulation to the output file with one row per simulation step
     Creates new file if there is a memory error
@@ -119,7 +120,7 @@ def append_outputfile_try(model, sim, filename):
 
     # Create new file if there is a memoryerror and add entire simulation results
     except MemoryError:
-        filename = create_outputfile()
+        filename = create_outputfile(iterations)
         append_outputfile(model, sim, filename)
 
     return filename
