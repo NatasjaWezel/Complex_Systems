@@ -120,7 +120,7 @@ class code_dev_simulation():
         for node in line_weights:
             line_weights[node] /= line_sum
 
-        stdev = 0.25
+        stdev = 0.4
         for node in pr.keys():
             node_data = nodes_dict[node]
             stdev_ = np.interp(line_weights[node], (min(line_weights.values()), max(line_weights.values())), (-stdev, stdev))
