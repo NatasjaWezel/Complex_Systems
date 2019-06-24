@@ -30,12 +30,13 @@ class code_dev_simulation():
         - Determine metric for pick_unfit_method
         - Determine better fitness metric, maybe based on amount of lines in a method
     """
-    def __init__(self, iterations, fitness_method, probabilities, exp_condition):
+    def __init__(self, iterations, fitness_method, probabilities, exp_condition, add_state):
         # params
         self.iterations = iterations
         self.fitness_method = fitness_method
         self.probabilities = probabilities
         self.exp_condition = exp_condition
+        self.add_state = add_state
 
         # initialisations
         self.running = True
@@ -278,7 +279,7 @@ class code_dev_simulation():
         """
         node = self.pick_unfit_method()
         method = node['method']
-        if np.random.random() <= 1:
+        if np.random.random() <= self.add_state:
             self.AST.add_statement(method)
             self.reference_graph.node[node['method'].name]['lines'] += 1
         else:
