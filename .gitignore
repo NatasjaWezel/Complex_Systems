@@ -109,3 +109,7 @@ model/output/*
 model/results/*
 
 .idea/*
+
+*.mp4
+/web_app/backend/node_modules/*
+/web_app/frontend/node_modules/*

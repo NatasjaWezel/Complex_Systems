@@ -17,6 +17,7 @@ DEFAULT_SIMULATIONS = 100
 DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
+LOGGING = True # Creates a fake log for gource
 EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 PROBABILITIES = {
     'create_method': 0.1,
@@ -57,7 +58,7 @@ def run_repo_model():
     for sim in range(simulations):
         print('Simulation {} of {}'.format(sim+1, simulations))
 
-        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES, EXP_CONDITION, add_prob)
+        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES, EXP_CONDITION, add_prob, LOGGING)
 
         print('Model instantiated...\n')
 
