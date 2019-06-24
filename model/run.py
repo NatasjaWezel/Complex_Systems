@@ -13,8 +13,8 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_SIMULATIONS = 10
-DEFAULT_ITERATIONS = 10**3 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 100
+DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
