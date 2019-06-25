@@ -90,7 +90,7 @@ class code_dev_simulation():
         for java_class in initial_classes:
             self.classes.append(java_class)
             self.directory_map[java_class.name] = ''
-            self.append_log_line('A', '/' + java_class.name, 'w+')
+            self.append_log_line('A', '/' + java_class.name, 'w')
             for java_element in java_class.body:
                 if isinstance(java_element, MethodDeclaration):
                     self.reference_graph.add_node(java_element.name, {'method': java_element, 'class': java_class, 'fitness': self.get_fitness(), 'lines': 0})
@@ -171,7 +171,7 @@ class code_dev_simulation():
             changes = 1
         method = self.AST.create_method(selected_class)
         fitness = self.get_fitness()
-        self.reference_graph.add_node(method.name, {'method': method, 'class': selected_class, 'fitness': fitness, 'lines': 0}) 
+        self.reference_graph.add_node(method.name, {'method': method, 'class': selected_class, 'fitness': fitness, 'lines': 0})
         self.append_log_line('M', self.directory_map[selected_class.name] + '/' + selected_class.name)
 
         # Add statement(s) based on probability to new method here? It is created empty
@@ -527,7 +527,7 @@ class code_dev_simulation():
                 nlp.remove('')
                 if len(nlp) == 0:
                     nlp.append('/dir_' + str(int(np.random.random() * 10000)))
-                return np.random.choice(nlp) + self.get_dir() 
+                return np.random.choice(nlp) + self.get_dir()
             return '/dir_' + str(num)
         else:
             # print(self.directory_map.values())

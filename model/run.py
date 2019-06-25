@@ -39,6 +39,14 @@ def run_repo_model():
 
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
     simulations = int(sys.argv[3]) if len(sys.argv) > 1 else DEFAULT_SIMULATIONS
+
+    PROBABILITIES['create_class'] = float(sys.argv[4]) if len(sys.argv) > 4 else PROBABILITIES['create_class']
+    PROBABILITIES['create_method'] = float(sys.argv[5]) if len(sys.argv) > 5 else PROBABILITIES['create_method']
+    PROBABILITIES['call_method'] = float(sys.argv[6]) if len(sys.argv) > 6 else PROBABILITIES['call_method']
+    PROBABILITIES['update_method'] = float(sys.argv[7]) if len(sys.argv) > 7 else PROBABILITIES['update_method']
+    PROBABILITIES['delete_method'] = float(sys.argv[8]) if len(sys.argv) > 8 else PROBABILITIES['delete_method']
+    print(sys.argv)
+    print(PROBABILITIES)
     assert (EXP_CONDITION in ['reproduce', 'no_rec', 'delete_state'])
 
     print('Going to run {} simulations, with condition: {}, fitness method: {} and number of steps: {}'.format(simulations,

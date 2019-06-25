@@ -1,0 +1,9 @@
+.video {
+    flex-basis: 75%;
+    overflow: hidden;
+}
+
+#gsourceVid {
+    height: 100%;
+    width: 100%;
+}
