@@ -13,9 +13,6 @@ from networkx import DiGraph
 # Model class imports
 from AST import AST
 
-# Pickle graph after run
-import pickle
-
 class code_dev_simulation():
     """
     The main model class for simulating a software development process.
@@ -103,11 +100,6 @@ class code_dev_simulation():
         for _ in range(self.iterations):
             self.changes.append(self.step())
             self.step_n += 1
-
-        # Pickle the directed graph for plotting network graph
-        # Will get overwritten if more simulations are done 
-        with open("gpickle.pickle", 'wb') as handle:
-            pickle.dump(self.reference_graph, handle)
 
     def step(self):
         """

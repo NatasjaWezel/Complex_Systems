@@ -13,6 +13,8 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
+from visualize_graph import visualize_graph
+
 DEFAULT_SIMULATIONS = 1
 DEFAULT_ITERATIONS = 10000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
@@ -63,6 +65,8 @@ def run_repo_model():
         gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
         gather_results(model, gen)
         filename = append_outputfile_try(model, sim, filename)
+
+        visualize_graph(model.reference_graph)
 
 def gather_results(model, generate_files):
     """
