@@ -8,7 +8,7 @@
 
 2. Install the Angular CLI, open a terminal and run: `npm install -g @angular/cli`.
 
-3. In the /frontend/ directory, open a termain and run: `npm install`.
+3. In the /frontend/ directory, open a terminal and run: `npm install`.
 
 #### Development
 
