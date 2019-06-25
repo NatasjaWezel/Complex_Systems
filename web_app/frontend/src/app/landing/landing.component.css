@@ -1,0 +1,31 @@
+#bgVid {
+    z-index: 0;
+}
+
+#main {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    -moz-animation: main 3s forwards;
+    -webkit-animation: main 3s forwards;
+    -ms-animation: main 3s forwards;
+    animation: main 3s forwards;
+}
+
+#header {
+    position: absolute;
+    color: white;
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 2rem;
+}

@@ -16,10 +16,11 @@ import datetime
 from visualize_graph import visualize_graph
 
 DEFAULT_SIMULATIONS = 1
-DEFAULT_ITERATIONS = 10000 # 100,000 steps is around 15 mins
+DEFAULT_ITERATIONS = 1000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec' ...
+LOGGING = True # Creates a fake log for gource
+EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 PROBABILITIES = {
     'create_method': 0.1,
     'call_method': 0.4,
@@ -27,6 +28,7 @@ PROBABILITIES = {
     'delete_method': 0.05,
     'create_class': 0.1
 }
+ADD_STATE = .8 # Prob of adding statement vs deleting
 
 def run_repo_model():
     """
@@ -39,19 +41,34 @@ def run_repo_model():
 
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
     simulations = int(sys.argv[3]) if len(sys.argv) > 1 else DEFAULT_SIMULATIONS
-    assert (EXP_CONDITION in ['reproduce', 'no_rec'])
 
-    # Create the output file
-    filename = create_outputfile(iterations)
+    PROBABILITIES['create_class'] = float(sys.argv[4]) if len(sys.argv) > 4 else PROBABILITIES['create_class']
+    PROBABILITIES['create_method'] = float(sys.argv[5]) if len(sys.argv) > 5 else PROBABILITIES['create_method']
+    PROBABILITIES['call_method'] = float(sys.argv[6]) if len(sys.argv) > 6 else PROBABILITIES['call_method']
+    PROBABILITIES['update_method'] = float(sys.argv[7]) if len(sys.argv) > 7 else PROBABILITIES['update_method']
+    PROBABILITIES['delete_method'] = float(sys.argv[8]) if len(sys.argv) > 8 else PROBABILITIES['delete_method']
+    print(sys.argv)
+    print(PROBABILITIES)
+    assert (EXP_CONDITION in ['reproduce', 'no_rec', 'delete_state'])
+
     print('Going to run {} simulations, with condition: {}, fitness method: {} and number of steps: {}'.format(simulations,
                                                                                                                EXP_CONDITION,
                                                                                                                FITNESS_METHOD,
                                                                                                                iterations))
+    # Set add/delete probability
+    if EXP_CONDITION == 'delete_state':
+        add_prob = ADD_STATE
+    else:
+        add_prob = 1
+    print('Statements are added with prob: {} and deleted with: {}'.format(add_prob, 1-add_prob))
+
+    # Create the output file
+    filename = create_outputfile(iterations, add_prob)
 
     for sim in range(simulations):
         print('Simulation {} of {}'.format(sim+1, simulations))
 
-        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES, EXP_CONDITION)
+        model = code_dev_simulation(iterations, FITNESS_METHOD, PROBABILITIES, EXP_CONDITION, add_prob, LOGGING)
 
         print('Model instantiated...\n')
 
@@ -64,7 +81,7 @@ def run_repo_model():
 
         gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
         gather_results(model, gen)
-        filename = append_outputfile_try(model, sim, filename)
+        filename = append_outputfile_try(model, sim, filename, iterations, add_prob)
 
         visualize_graph(model.reference_graph)
 
@@ -89,7 +106,7 @@ def gather_results(model, generate_files):
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
 
-def create_outputfile(iterations):
+def create_outputfile(iterations, add_prob):
     """
     Creates an output file with the header, returns filename
     Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax', 'code_size', 'changes'
@@ -100,7 +117,7 @@ def create_outputfile(iterations):
     # Create folder
     os.makedirs('results', exist_ok=True)
     # Create file
-    filename = 'results/result_' + str(EXP_CONDITION) + '_fit' + str(FITNESS_METHOD) + '_its' + str(iterations) + '_time' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
+    filename = 'results/result_' + str(EXP_CONDITION) + '_fit' + str(FITNESS_METHOD) + '_its' + str(iterations) + '_addprob' + str(add_prob) + '_time' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
     with open(filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
@@ -108,7 +125,7 @@ def create_outputfile(iterations):
 
     return filename
 
-def append_outputfile_try(model, sim, filename):
+def append_outputfile_try(model, sim, filename, iterations, add_prob):
     """
     Appends results from a simulation to the output file with one row per simulation step
     Creates new file if there is a memory error
@@ -121,7 +138,7 @@ def append_outputfile_try(model, sim, filename):
 
     # Create new file if there is a memoryerror and add entire simulation results
     except MemoryError:
-        filename = create_outputfile()
+        filename = create_outputfile(iterations, add_prob)
         append_outputfile(model, sim, filename)
 
     return filename
