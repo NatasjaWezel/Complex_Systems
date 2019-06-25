@@ -8,37 +8,42 @@ from networkx import DiGraph
 
 import pickle
 
-with open("gpickle.pickle", 'rb') as handler:
-    G = pickle.load(handler)
+import time
 
-text_labels = list(G.nodes)
+# Create number for each group to allow use of colormap
+from itertools import count
 
-label_dict = {}
-for i, node in enumerate(G.nodes):
-    label_dict[node] = text_labels[i]
-print(label_dict)
-pos = nx.layout.spring_layout(G)
+def main():
+    with open("gpickle.pickle", 'rb') as handler:
+        G = pickle.load(handler)
+
+    nodes_dict = dict(G.nodes(data=True))
+
+    # Get unique groups
+    groups = set([nodes_dict[method_node]['data']['class'].name for method_node in G.__iter__()])
+    mapping = dict(zip(sorted(groups), count()))
+
+    # Color is dependent on which class the node is in
+    colors = [mapping[nodes_dict[node]['data']['class'].name] for node in G.__iter__()]
+
+    # Node size gets bigger if the node has more edges going in
+    node_sizes = [in_degree * 3 + 2 for node, in_degree in G.in_degree()]
+
+    # Use a spring layout for the network
+    pos = nx.layout.spring_layout(G, dim=3)
+
+    # Draw the nodes and edges separately so we can set their properties
+    nodes = nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=colors, cmap=plt.cm.jet)
+    edges = nx.draw_networkx_edges(G, pos, node_size=node_sizes, arrowstyle='->',
+                                   arrowsize=5, edge_color='grey',
+                                   width=0.2)
+    timer = time.time()
+
+    ax = plt.gca()
+    ax.set_axis_off()
+    # plt.title("Reference graph simulated Java methods")
+    plt.savefig("network_" + str(timer) + ".png", dpi=500)
 
 
-node_sizes = [3 + 10 * i for i in range(len(G))]
-M = G.number_of_edges()
-edge_colors = range(2, M + 2)
-edge_alphas = [(5 + i) / (M + 4) for i in range(M)]
-
-labels = nx.draw_networkx_labels(G, pos, label_dict)
-nodes = nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color='blue')
-edges = nx.draw_networkx_edges(G, pos, node_size=node_sizes, arrowstyle='->',
-                               arrowsize=10, edge_color=edge_colors,
-                               edge_cmap=plt.cm.Blues, width=2)
-
-# set alpha value for each edge
-for i in range(M):
-    edges[i].set_alpha(edge_alphas[i])
-
-pc = mpl.collections.PatchCollection(edges, cmap=plt.cm.Blues)
-pc.set_array(edge_colors)
-plt.colorbar(pc)
-
-ax = plt.gca()
-ax.set_axis_off()
-plt.savefig("network.png")
+if __name__ == '__main__':
+    main()

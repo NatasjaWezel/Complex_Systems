@@ -14,7 +14,7 @@ import csv
 import datetime
 
 DEFAULT_SIMULATIONS = 1
-DEFAULT_ITERATIONS = 1000 # 100,000 steps is around 15 mins
+DEFAULT_ITERATIONS = 10000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec' ...
@@ -72,8 +72,6 @@ def gather_results(model, generate_files):
         - model (Code_dev_simulation): Model to analyse the results of
         - generate_files (bool): Indicates whether to generate the created java files
 
-    TODO:
-        - Test implementation of java file generation
     """
     if (generate_files):
         if os.path.exists('output'):
