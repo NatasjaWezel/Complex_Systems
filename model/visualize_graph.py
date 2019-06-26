@@ -8,6 +8,7 @@ from networkx import DiGraph
 
 import pickle
 
+import os
 import time
 
 # Create number for each group to allow use of colormap
@@ -39,4 +40,6 @@ def visualize_graph(G):
     ax = plt.gca()
     ax.set_axis_off()
     # plt.title("Reference graph simulated Java methods")
+
+    os.makedirs('output/figures', exist_ok=True)
     plt.savefig("./output/figures/network_" + str(timer) + ".png", dpi=500)
