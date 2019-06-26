@@ -12,6 +12,7 @@ import { ThirdPageComponent } from './third-page/third-page.component';
 import { FourthPageComponent } from './fourth-page/fourth-page.component';
 import { ModelRunnerComponent } from './model-runner/model-runner.component';
 import { RunModelComponent } from './model-runner/run-model/run-model.component';
+import { ResultsPageComponent } from './results-page/results-page.component';
 
 // External
 import { Ng5SliderModule } from 'ng5-slider';
@@ -25,7 +26,8 @@ import { Ng5SliderModule } from 'ng5-slider';
       ThirdPageComponent,
       FourthPageComponent,
       ModelRunnerComponent,
-      RunModelComponent
+      RunModelComponent,
+      ResultsPageComponent
    ],
    imports: [
       BrowserModule,
