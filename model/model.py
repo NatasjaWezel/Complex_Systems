@@ -539,5 +539,5 @@ class code_dev_simulation():
         time = self.start + self.step_n * 100
         user = 'user_' + str(np.random.randint(1, 10))
 
-        f = open("code.log", param)
+        f = open("./vid/code.log", param)
         f.write(str(int(time)) + '|' + user + '|' + action + '|' + fl + '\n')

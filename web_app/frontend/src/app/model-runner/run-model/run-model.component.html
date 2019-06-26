@@ -4,12 +4,27 @@
     2. Run model
   </div>
 
-  <button type="button" (click)="runModel()">Run model</button> 
-
-
+  <button *ngIf="!running" class="run-btn" [disabled]="running" type="button" (click)="runModel()">Run the model!</button> 
+  <button *ngIf="running" class="run-btn" [disabled]="running" type="button">Wait for the model to finish running</button> 
 
   <div class="sub-title">
     3. Visualise & Analyse
+  </div>
+
+  <div class="loading" *ngIf="running">
+    <div class="loading-text">Running the model</div> 
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+
+  <div class="results-place-holder" *ngIf="!firstRun">
+    Run the model to view their results!
+  </div>
+
+  <div class="gource-result" *ngIf="gourceUrl && !running">
+    <video #videoPlayer  autoplay="" muted="" loop="">
+      <source [src]="gourceUrl" type="video/mp4" />
+      Browser not supported
+    </video>
   </div>
 
 </div>

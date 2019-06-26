@@ -65,6 +65,9 @@ def run_repo_model():
     # Create the output file
     filename = create_outputfile(iterations, add_prob)
 
+    if LOGGING:
+        os.makedirs('./vid', exist_ok=True)
+
     for sim in range(simulations):
         print('Simulation {} of {}'.format(sim+1, simulations))
 
@@ -79,7 +82,7 @@ def run_repo_model():
 
         print('Model run completed..!\nTook {} seconds.\n'.format(time.time() - start_time))
 
-        gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
+        gen = True if len(sys.argv) > 2 and sys.argv[2] == 'True' else False
         gather_results(model, gen)
         filename = append_outputfile_try(model, sim, filename, iterations, add_prob)
 

@@ -5,6 +5,7 @@ var url = require('url');
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const compression = require('compression');
@@ -13,8 +14,10 @@ const exec = require("child_process").exec;
 
 const app = express();
 app.use(cors());
-
 app.use(compression());
+
+// var dir = path.join(__dirname, 'dist/frontend');
+// app.use(express.static(dir));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,13 +45,16 @@ app.post('/run', (req, res) => {
     pythonProcess.stdout.on('data', (data) => {
         console.log(data);
 
-        const cmd = 'gource --hide dirnames, filenames code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4';
+        const cmd = 'gource --hide dirnames, filenames ./vid/code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 web_output/gource.mp4';
         exec(cmd, (err, stdout, stderr) => {
             if (err) {
               console.error(`exec error: ${err}`);
               return;
             }
-            res.json({ output: 'success'});
+            res.json({
+                output: 'success',
+                gource: {'url': 'gource.mp4', 'type': 'video/mp4'}
+            });
             console.log('Created video');
             res.end();
         });
@@ -56,26 +62,33 @@ app.post('/run', (req, res) => {
 });
 
 
-app.get('/test', (req, res) => {
-    console.log('Testing...');
-    const cmd = 'gource --hide dirnames, filenames code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 gource.mp4';
+app.get('/file/*', (req, res) => {
+    res = addHeaders(res);
+    let file = '';
+    if (Object.keys(req.query).length > 0) {
+        file = req.url.substring(
+            6, // Skip /file/ 
+            req.url.lastIndexOf("?")
+        );
+    } else {
+        file = req.url.substr(6);
+    }
+    const type = req.query.type;
 
-    exec(cmd, (err, stdout, stderr) => {
-        if (err) {
-          console.error(`exec error: ${err}`);
-          return;
-        }
-        console.log('done!');
-        res.status(200);
-        res.end();
+    var s = fs.createReadStream('./web_output/' + file);
+    s.on('open', function () {
+        res.set('Content-Type', type);
+        s.pipe(res);
+    });
+    s.on('error', function () {
+        res.set('Content-Type', 'text/plain');
+        res.status(404).end('Not found');
     });
 });
 
-
-
 /**
  * Serve index.html and let Angular do routing for all other endpoints
- */ 
+ */
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/frontend/index.html'));
 });

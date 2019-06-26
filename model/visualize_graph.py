@@ -39,4 +39,4 @@ def visualize_graph(G):
     ax = plt.gca()
     ax.set_axis_off()
     # plt.title("Reference graph simulated Java methods")
-    plt.savefig("network_" + str(timer) + ".png", dpi=500)
+    plt.savefig("./output/figures/network_" + str(timer) + ".png", dpi=500)
