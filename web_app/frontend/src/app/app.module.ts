@@ -14,6 +14,7 @@ import { FourthPageComponent } from './fourth-page/fourth-page.component';
 import { ModelRunnerComponent } from './model-runner/model-runner.component';
 import { RunModelComponent } from './model-runner/run-model/run-model.component';
 import { ResultsPageComponent } from './results-page/results-page.component';
+import { MoreResultsPageComponent } from './results-page/more-results-page/more-results-page.component';
 import { DiscussionPageComponent } from './discussion-page/discussion-page.component';
 
 // External
@@ -31,6 +32,7 @@ import { Ng5SliderModule } from 'ng5-slider';
       ModelRunnerComponent,
       RunModelComponent,
       ResultsPageComponent,
+      MoreResultsPageComponent,
       DiscussionPageComponent
    ],
    imports: [
