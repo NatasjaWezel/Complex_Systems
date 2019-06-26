@@ -15,12 +15,12 @@ import datetime
 
 from visualize_graph import visualize_graph
 
-DEFAULT_SIMULATIONS = 1
-DEFAULT_ITERATIONS = 1000 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 100
+DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 LOGGING = False # Creates a fake log for gource
-EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
+EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment 
 DEFAULT_PREF_ATTACH_CONDITION = 0
@@ -68,7 +68,7 @@ def run_repo_model():
     print('Statements are added with prob: {} and deleted with: {}'.format(add_prob, 1-add_prob))
 
     # Create the output file
-    filename = create_outputfile(iterations, add_prob)
+    filename = create_outputfile(iterations, add_prob, pref_attach_condition)
 
     if LOGGING:
         os.makedirs('./vid', exist_ok=True)
@@ -114,7 +114,7 @@ def gather_results(model, generate_files):
             with open(os.path.join('output/src', class_info.name + '.java'), 'w') as java_file:
                 java_file.write(java_printer.result)
 
-def create_outputfile(iterations, add_prob):
+def create_outputfile(iterations, add_prob, pref_attach_condition):
     """
     Creates an output file with the header, returns filename
     Columns are 'sim', 'step', 'fmin', 'action', 'fnum', 'fmean', 'fstd', 'fmin', 'fmax', 'code_size', 'changes'
@@ -125,7 +125,7 @@ def create_outputfile(iterations, add_prob):
     # Create folder
     os.makedirs('results', exist_ok=True)
     # Create file
-    filename = 'results/result_' + str(EXP_CONDITION) + '_fit' + str(FITNESS_METHOD) + '_its' + str(iterations) + '_addprob' + str(add_prob) + '_time' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
+    filename = 'results/result_' + str(EXP_CONDITION) + '_fit' + str(FITNESS_METHOD) + '_its' + str(iterations) + '_addprob' + str(add_prob) + '_pref' + str(DEFAULT_PREF_ATTACH_CONDITION) + '_time' + str(datetime.datetime.now().strftime("%d_%H_%M_%S")) + '.csv'
     with open(filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
