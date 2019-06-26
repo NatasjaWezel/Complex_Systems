@@ -27,7 +27,7 @@ export class ModelRunnerComponent implements OnInit {
 
   optionsIts: Options = {
     floor: 10,
-    ceil: 1000,
+    ceil: 5000,
     step: 10,
     animate: false,
   };

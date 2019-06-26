@@ -519,23 +519,25 @@ class code_dev_simulation():
         return sum([nodes_dict[method_node]['data']['lines'] for method_node in self.reference_graph.__iter__()])
 
     def get_dir(self):
+        if self.logging == False:
+            return ''
+
         if np.random.random() <= self.create_dir_prob:
             num = len(self.directory_map.values())
             if np.random.random() <= 0.6:
                 nlp = list(self.directory_map.values()).copy()
-                nlp.remove('')
+                if '' in nlp:
+                    nlp.remove('')
                 if len(nlp) == 0:
                     nlp.append('/dir_' + str(int(np.random.random() * 10000)))
                 return np.random.choice(nlp) + self.get_dir()
             return '/dir_' + str(num)
         else:
-            # print(self.directory_map.values())
             return np.random.choice(list(self.directory_map.values()))
 
     def append_log_line(self, action, fl, param='a+'):
         if self.logging == False:
             return
-
         time = self.start + self.step_n * 100
         user = 'user_' + str(np.random.randint(1, 10))
 
