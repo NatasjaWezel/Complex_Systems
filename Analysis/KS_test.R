@@ -1,3 +1,5 @@
+# powerlaw bootstrapping to determine p_values_,xmin_values & alfa_values
+
 setwd('/Users/koengreuell/Documents/1819css/sourcetree/Analysis/')
 number_of_simulations = 100
 #!/usr/bin/Rscript

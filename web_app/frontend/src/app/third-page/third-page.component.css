@@ -1,0 +1,11 @@
+.image-wrap {
+    flex-basis: 75%;
+}
+
+.plot {
+    width: 85%;
+    height: 85%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+}
