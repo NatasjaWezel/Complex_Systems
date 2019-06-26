@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { FirstPageComponent } from './first-page/first-page.component';
 import { SecondPageComponent } from './second-page/second-page.component';
+import { TheoryPageComponent } from './theory-page/theory-page.component';
 import { ThirdPageComponent } from './third-page/third-page.component';
 import { FourthPageComponent } from './fourth-page/fourth-page.component';
 import { ModelRunnerComponent } from './model-runner/model-runner.component';
@@ -23,6 +24,7 @@ import { Ng5SliderModule } from 'ng5-slider';
       LandingComponent,
       FirstPageComponent,
       SecondPageComponent,
+      TheoryPageComponent,
       ThirdPageComponent,
       FourthPageComponent,
       ModelRunnerComponent,
