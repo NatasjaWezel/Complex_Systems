@@ -21,7 +21,7 @@
   </div>
 
   <div class="gource-result" *ngIf="gourceUrl && !running">
-    <video #videoPlayer  autoplay="" muted="" loop="">
+    <video #videoPlayer playsinline autoplay muted loop>
       <source [src]="gourceUrl" type="video/mp4" />
       Browser not supported
     </video>
