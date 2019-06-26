@@ -1,0 +1,20 @@
+{
+  "name": "css_dev_ops_sim_backend",
+  "version": "1.0.0",
+  "description": "Complex Simulation: Code base evolution WebApp backend",
+  "main": "server.js",
+  "dependencies": {
+    "compression": "^1.7.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Mathijs Maijer",
+  "license": "ISC"
+}

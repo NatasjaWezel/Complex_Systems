@@ -13,8 +13,10 @@ from java_printer import JavaPrinter
 import csv
 import datetime
 
-DEFAULT_SIMULATIONS = 100
-DEFAULT_ITERATIONS = 10**5 # 100,000 steps is around 15 mins
+from visualize_graph import visualize_graph
+
+DEFAULT_SIMULATIONS = 1
+DEFAULT_ITERATIONS = 1000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 LOGGING = True # Creates a fake log for gource
@@ -39,6 +41,14 @@ def run_repo_model():
 
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_ITERATIONS
     simulations = int(sys.argv[3]) if len(sys.argv) > 1 else DEFAULT_SIMULATIONS
+
+    PROBABILITIES['create_class'] = float(sys.argv[4]) if len(sys.argv) > 4 else PROBABILITIES['create_class']
+    PROBABILITIES['create_method'] = float(sys.argv[5]) if len(sys.argv) > 5 else PROBABILITIES['create_method']
+    PROBABILITIES['call_method'] = float(sys.argv[6]) if len(sys.argv) > 6 else PROBABILITIES['call_method']
+    PROBABILITIES['update_method'] = float(sys.argv[7]) if len(sys.argv) > 7 else PROBABILITIES['update_method']
+    PROBABILITIES['delete_method'] = float(sys.argv[8]) if len(sys.argv) > 8 else PROBABILITIES['delete_method']
+    print(sys.argv)
+    print(PROBABILITIES)
     assert (EXP_CONDITION in ['reproduce', 'no_rec', 'delete_state'])
 
     print('Going to run {} simulations, with condition: {}, fitness method: {} and number of steps: {}'.format(simulations,
@@ -55,6 +65,9 @@ def run_repo_model():
     # Create the output file
     filename = create_outputfile(iterations, add_prob)
 
+    if LOGGING:
+        os.makedirs('./vid', exist_ok=True)
+
     for sim in range(simulations):
         print('Simulation {} of {}'.format(sim+1, simulations))
 
@@ -69,9 +82,11 @@ def run_repo_model():
 
         print('Model run completed..!\nTook {} seconds.\n'.format(time.time() - start_time))
 
-        gen = bool(sys.argv[2]) if len(sys.argv) > 2 else False
+        gen = True if len(sys.argv) > 2 and sys.argv[2] == 'True' else False
         gather_results(model, gen)
         filename = append_outputfile_try(model, sim, filename, iterations, add_prob)
+
+        visualize_graph(model.reference_graph)
 
 def gather_results(model, generate_files):
     """
@@ -81,8 +96,6 @@ def gather_results(model, generate_files):
         - model (Code_dev_simulation): Model to analyse the results of
         - generate_files (bool): Indicates whether to generate the created java files
 
-    TODO:
-        - Test implementation of java file generation
     """
     if (generate_files):
         if os.path.exists('output'):

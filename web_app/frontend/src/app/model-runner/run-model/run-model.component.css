@@ -1,0 +1,42 @@
+.first-elem {
+    overflow: visible !important;
+}
+
+.run-btn {
+    font-size: 2rem;
+    background: black;
+    border: 1px solid white;
+    color: white;
+    border-radius: 5px;
+    padding: 15px;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+.run-btn:hover {
+    background: rgba(255,255,255,.2);
+}
+
+.run-btn:disabled {
+    opacity: .5;
+    cursor: default;
+    background: black !important;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.loading-text {
+    display: inline-block;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.results-place-holder {
+    margin-top: 5%;
+    font-size: 2.5rem;
+    color: white;
+}

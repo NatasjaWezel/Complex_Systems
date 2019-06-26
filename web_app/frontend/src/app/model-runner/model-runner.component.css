@@ -1,0 +1,40 @@
+.first-elem {
+    flex-direction: column !important;
+    align-items: center;
+}
+
+.title {
+    margin-top: 5%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.sub-title {
+    margin-top: 5%;
+    font-size: 1.5rem;
+}
+
+.param-container {
+    width: 50%;
+}
+
+.param-slider {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.sub-sub-title {
+    margin-top: 50px;
+}
+
+p {
+    margin-top: 25px;
+}
+
+::ng-deep app-model-runner .ng5-slider {
+    min-width: 25% !important;
+    width: 25% !important;
+}

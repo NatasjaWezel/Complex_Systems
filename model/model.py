@@ -14,7 +14,6 @@ from networkx import DiGraph
 # Model class imports
 from AST import AST
 
-
 class code_dev_simulation():
     """
     The main model class for simulating a software development process.
@@ -90,10 +89,10 @@ class code_dev_simulation():
         for java_class in initial_classes:
             self.classes.append(java_class)
             self.directory_map[java_class.name] = ''
-            self.append_log_line('A', '/' + java_class.name, 'w+')
+            self.append_log_line('A', '/' + java_class.name, 'w')
             for java_element in java_class.body:
                 if isinstance(java_element, MethodDeclaration):
-                    self.reference_graph.add_node(java_element.name, {'method': java_element, 'class': java_class, 'fitness': self.get_fitness(), 'lines': 0})
+                    self.reference_graph.add_node(java_element.name, data={'method': java_element, 'class': java_class, 'fitness': self.get_fitness(), 'lines': 0})
                     self.append_log_line('M', '/' + java_class.name)
 
     def get_fitness(self):
@@ -171,8 +170,10 @@ class code_dev_simulation():
             changes = 1
         method = self.AST.create_method(selected_class)
         fitness = self.get_fitness()
-        self.reference_graph.add_node(method.name, {'method': method, 'class': selected_class, 'fitness': fitness, 'lines': 0}) 
+
+        self.reference_graph.add_node(method.name, data={'method': method, 'class': selected_class, 'fitness': fitness, 'lines': 0})
         self.append_log_line('M', self.directory_map[selected_class.name] + '/' + selected_class.name)
+
 
         # Add statement(s) based on probability to new method here? It is created empty
 
@@ -197,9 +198,9 @@ class code_dev_simulation():
         methods = []
         sizes = []
         in_degrees = []
-        for node, in_degree in self.reference_graph.in_degree_iter():
+        for node, in_degree in self.reference_graph.in_degree():
             in_degrees.append(in_degree)
-            data = self.reference_graph.node[node]
+            data = self.reference_graph.node[node]['data']
             methods.append(data)
             sizes.append(len(data['method'].body))
 
@@ -290,21 +291,20 @@ class code_dev_simulation():
             - grow?
         """
         node = self.pick_unfit_method()
-        method = node['method']
+        method = node['data']['method']
         change = 0
         if np.random.random() <= self.add_state:
             self.AST.add_statement(method)
-            self.reference_graph.node[node['method'].name]['lines'] += 1
+            self.reference_graph.node[node['data']['method'].name]['data']['lines'] += 1
             change = 1
         else:
             stmt = self.pick_statement(method)
             if stmt:
                 self.AST.delete_statement(method, stmt)
-                self.reference_graph.node[node['method'].name]['lines'] -= 1 if self.reference_graph.node[node['method'].name]['lines'] > 0 else 0
+                self.reference_graph.node[node['data']['method'].name]['data']['lines'] -= 1 if self.reference_graph.node[node['data']['method'].name]['data']['lines'] > 0 else 0
                 change = -1
-        # self.reference_graph.nodes(data=method)[0][1]['fitness'] = self.get_fitness()
-        self.append_log_line('M', self.directory_map[node['class'].name] + '/' + node['class'].name)
-        self.reference_graph.node[node['method'].name]['fitness'] = self.get_fitness()
+        self.append_log_line('M', self.directory_map[node['data']['class'].name] + '/' + node['data']['class'].name)
+        self.reference_graph.node[node['data']['method'].name]['data']['fitness'] = self.get_fitness()
         return change
 
     def pick_statement(self, method):
@@ -351,17 +351,17 @@ class code_dev_simulation():
             node = self.pick_unfit_method()
 
         method_info = node
-        method = node['method'].name
-        class_node = node['class']
+        class_node = node['data']['class']
+        method = node['data']['method'].name
 
         void_callers = []
-        for caller in self.reference_graph.predecessors_iter(method):
+        for caller in self.reference_graph.predecessors(method):
             if caller != method:
                 # Get the caller and delete the reference
-                caller_info = self.reference_graph.node[caller]
+                caller_info = self.reference_graph.node[caller]['data']
                 caller_node = caller_info['method']
-                self.AST.delete_reference(caller_node, method_info['method'], class_node)
-                self.append_log_line('M', self.directory_map[method_info['class'].name] + '/' + method_info['class'].name)
+                self.AST.delete_reference(caller_node, method_info['data']['method'], class_node)
+                self.append_log_line('M', self.directory_map[method_info['data']['class'].name] + '/' + method_info['data']['class'].name)
                 # If the caller has become empty, add it to the queue to delete later
                 if len(caller_node.body) == 0:
                     void_callers.append(caller)
@@ -371,8 +371,8 @@ class code_dev_simulation():
                     caller_info['lines'] -= 1
                     change_size -= 1
         # Delete the method after deleting all the invocation statements
-        self.AST.delete_method(class_node, method_info['method'])
-        self.append_log_line('M', self.directory_map[method_info['class'].name] + '/' + method_info['class'].name)
+        self.AST.delete_method(class_node, method_info['data']['method'])
+        self.append_log_line('M', self.directory_map[method_info['data']['class'].name] + '/' + method_info['data']['class'].name)
         self.reference_graph.remove_node(method)
         if len(class_node.body) == 0:
             self.classes.remove(class_node)
@@ -407,17 +407,16 @@ class code_dev_simulation():
 
         Returns:
             method
-
-        TODO:
-            Redesign fitness metric to base sampling on
         """
         method_fitness = ('empty', 2)
         nodes_dict = dict(self.reference_graph.nodes(data=True))
         for method_node in self.reference_graph.__iter__():
             node_data = nodes_dict[method_node]
-            fitness = node_data['fitness']
+            fitness = node_data['data']['fitness']
+
             if fitness < method_fitness[1]:
                 method_fitness = (node_data, fitness)
+
         return method_fitness[0]
 
     def get_fmin(self):
@@ -430,7 +429,7 @@ class code_dev_simulation():
         method_fitness = ('empty', 2)
         nodes_dict = dict(self.reference_graph.nodes(data=True))
         for method_node in self.reference_graph.__iter__():
-            node_data = nodes_dict[method_node]
+            node_data = nodes_dict[method_node]['data']
             fitness = node_data['fitness']
             if fitness < method_fitness[1]:
                 method_fitness = (node_data, fitness)
@@ -502,7 +501,7 @@ class code_dev_simulation():
 
         """
         nodes_dict = dict(self.reference_graph.nodes(data=True))
-        return [nodes_dict[method_node]['fitness'] for method_node in self.reference_graph.__iter__()]
+        return [nodes_dict[method_node]['data']['fitness'] for method_node in self.reference_graph.__iter__()]
 
     def fitness_stats(self, fitnesses):
         """
@@ -517,28 +516,30 @@ class code_dev_simulation():
         Save the total code base size (total amount of method lines) by summing the lines of each method
         """
         nodes_dict = dict(self.reference_graph.nodes(data=True))
-        return sum([nodes_dict[method_node]['lines'] for method_node in self.reference_graph.__iter__()])
+        return sum([nodes_dict[method_node]['data']['lines'] for method_node in self.reference_graph.__iter__()])
 
     def get_dir(self):
+        if self.logging == False:
+            return ''
+
         if np.random.random() <= self.create_dir_prob:
             num = len(self.directory_map.values())
             if np.random.random() <= 0.6:
                 nlp = list(self.directory_map.values()).copy()
-                nlp.remove('')
+                if '' in nlp:
+                    nlp.remove('')
                 if len(nlp) == 0:
                     nlp.append('/dir_' + str(int(np.random.random() * 10000)))
-                return np.random.choice(nlp) + self.get_dir() 
+                return np.random.choice(nlp) + self.get_dir()
             return '/dir_' + str(num)
         else:
-            # print(self.directory_map.values())
             return np.random.choice(list(self.directory_map.values()))
 
     def append_log_line(self, action, fl, param='a+'):
         if self.logging == False:
             return
-
         time = self.start + self.step_n * 100
         user = 'user_' + str(np.random.randint(1, 10))
 
-        f = open("code.log", param)
+        f = open("./vid/code.log", param)
         f.write(str(int(time)) + '|' + user + '|' + action + '|' + fl + '\n')

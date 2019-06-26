@@ -1,0 +1,47 @@
+<div class="first-elem">
+  <div class="title">Run the model</div>
+
+  <div class="sub-title">
+    1. Specify the parameters
+  </div>
+
+  <div class="param-container">
+
+    <div class="sub-sub-title">
+      Model probabilities:
+    </div>
+
+    <div class="param-slider">
+      <p class="">Create method: <input type="number" [(ngModel)]="p_c_class"></p>
+      <ng5-slider [(value)]="p_c_class" [options]="options" (valueChange)="valChange($event, 'p_c_class')"></ng5-slider>
+    </div>
+    <div class="param-slider">
+      <p>Create class: <input type="number" [(ngModel)]="p_cr_method"></p>
+      <ng5-slider [(value)]="p_cr_method" [options]="options" (valueChange)="valChange($event, 'p_cr_method')"></ng5-slider>
+    </div>
+    <div class="param-slider">
+      <p>Call method: <input type="number" [(ngModel)]="p_ca_method"></p>
+      <ng5-slider [(value)]="p_ca_method" [options]="options" (valueChange)="valChange($event, 'p_ca_method')"></ng5-slider>
+    </div>
+    <div class="param-slider">
+      <p>Update method: <input type="number" [(ngModel)]="p_u_method"></p>
+      <ng5-slider [(value)]="p_u_method" [options]="options" (valueChange)="valChange($event, 'p_u_method')"></ng5-slider>
+    </div>
+
+    <div class="param-slider">
+      <p>Remove method: <input type="number" [(ngModel)]="p_d_method"></p>
+      <ng5-slider [(value)]="p_d_method" [options]="options" (valueChange)="valChange($event, 'p_d_method')"></ng5-slider>
+    </div>
+
+    <div class="sub-sub-title">
+      Iterations:
+    </div>
+
+    <div class="param-slider">
+      <p>Iterations: <input type="number" [(ngModel)]="its"></p>
+      <ng5-slider [(value)]="its" [options]="optionsIts" (valueChange)="valChange($event, 'its')"></ng5-slider>
+    </div>
+  </div>
+</div>
+
+<app-run-model  ></app-run-model>
