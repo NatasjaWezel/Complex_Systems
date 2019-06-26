@@ -25,18 +25,23 @@ class code_dev_simulation():
         iterations (int): Total amount of iterations to simulate
         fitness_method (int): The method indication to define the fitness metric
         probabilities (dict<string, int>): Maps probability to a certain function
-
-    TODO:
-        - Determine metric for pick_unfit_method
-        - Determine better fitness metric, maybe based on amount of lines in a method
+        exp_condition (string): String of the experiment condition
+        add_state (float): Probability of adding a statement
+        logging (boolean): Indicates whether a custom gource log should be made
+        pref_attach_condition (integer): Condition for what kind of preferential attachment to use:
+            0 = Caller and callee use pref attachment
+            1 = Only caller
+            2 = Only callee
+            3 = No preferential attachment
     """
-    def __init__(self, iterations, fitness_method, probabilities, exp_condition, add_state, logging):
+    def __init__(self, iterations, fitness_method, probabilities, exp_condition, add_state, logging, pref_attach_condition):
         # params
         self.iterations = iterations
         self.fitness_method = fitness_method
         self.probabilities = probabilities
         self.exp_condition = exp_condition
         self.add_state = add_state
+        self.pref_attach_condition = pref_attach_condition
 
         # initialisations
         self.start = time.time()
@@ -208,8 +213,23 @@ class code_dev_simulation():
         in_degrees = [1 if s == 0 else s+1 for s in in_degrees]
         caller_method_probabilities = list(np.array(sizes)/np.sum(sizes))
         callee_method_probabilities = list(np.array(in_degrees)/np.sum(in_degrees))
-        caller_info = self.sample(methods, caller_method_probabilities)
-        callee_info = self.sample(methods, callee_method_probabilities)
+
+        # Preferential attachment 2
+        if self.pref_attach_condition == 0:
+            caller_info = self.sample(methods, caller_method_probabilities)
+            callee_info = self.sample(methods, callee_method_probabilities)
+        # Caller pref attachment
+        elif self.pref_attach_condition == 1:
+            caller_info = self.sample(methods, caller_method_probabilities)
+            callee_info = np.random.choice(methods)
+        # callee pref attachment
+        elif self.pref_attach_condition == 2:
+            caller_info = np.random.choice(methods)
+            callee_info = self.sample(methods, callee_method_probabilities)
+        # No preferential attachment
+        elif self.pref_attach_condition == 3:
+            caller_info = np.random.choice(methods)
+            callee_info = np.random.choice(methods)
 
         if self.exp_condition != 'reproduce':
             callee_info = self.find_callee(caller_info, callee_info, methods, callee_method_probabilities, sizes,
