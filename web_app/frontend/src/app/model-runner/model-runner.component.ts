@@ -16,7 +16,7 @@ export class ModelRunnerComponent implements OnInit {
   p_u_method = 0.45;
   p_d_method = 0.05;
 
-  its = 500;
+  its = 2500;
 
   options: Options = {
     floor: 0,

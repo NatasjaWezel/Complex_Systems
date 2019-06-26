@@ -45,7 +45,7 @@ app.post('/run', (req, res) => {
     pythonProcess.stdout.on('data', (data) => {
         console.log(data);
 
-        const cmd = 'gource --hide dirnames, filenames ./vid/code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 web_output/gource.mp4';
+        const cmd = 'gource --seconds-per-day 5 --hide dirnames, filenames ./vid/code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 web_output/gource.mp4';
         exec(cmd, (err, stdout, stderr) => {
             if (err) {
               console.error(`exec error: ${err}`);
@@ -104,7 +104,7 @@ if (module === require.main) {
     // Start server
     const server = app.listen(process.env.PORT || 8080, function () {
         const port = server.address().port;
-
+        server.setTimeout(1000*60*5);
         console.log('Listening on port %s', port);
         console.log('Ctrl + C to close the server.');
     })
