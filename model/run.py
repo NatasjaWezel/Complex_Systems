@@ -26,7 +26,7 @@ EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 
 CREATE_COMMITS_CSV = True
 
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment
-DEFAULT_PREF_ATTACH_CONDITION = 2
+DEFAULT_PREF_ATTACH_CONDITION = 0
 
 PROBABILITIES = {
     'create_method': 0.1,
