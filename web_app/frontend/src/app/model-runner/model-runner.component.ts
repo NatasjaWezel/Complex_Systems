@@ -32,7 +32,7 @@ export class ModelRunnerComponent implements OnInit {
     animate: false,
   };
 
-  constructor(private _modelService: ModelSettingsService) { }
+  constructor(public _modelService: ModelSettingsService) { }
 
   ngOnInit() {
   }

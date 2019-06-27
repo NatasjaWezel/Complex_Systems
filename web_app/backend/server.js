@@ -51,12 +51,29 @@ app.post('/run', (req, res) => {
               console.error(`exec error: ${err}`);
               return;
             }
-            res.json({
-                output: 'success',
-                gource: {'url': 'gource.mp4', 'type': 'video/mp4'}
-            });
+
             console.log('Created video');
-            res.end();
+
+            
+            const cmd = 'Rscript --save ./Merelo_web.R'
+            exec(cmd, (err, stdout, stderr) => {
+                if (err) {
+                    console.error(`exec error: ${err}`);
+                    return;
+                }
+                console.log('Created plot\n\n');
+
+
+                res.json({
+                    output: 'success',
+                    gource: {'url': 'gource.mp4', 'type': 'video/mp4'},
+                    network: {'url': 'network.png', 'type': 'image/png'},
+                    powerlaw: {'url': 'powerlaw.png', 'type': 'image/png'}
+                });
+
+                res.end();
+            })
+
         });
     })
 });

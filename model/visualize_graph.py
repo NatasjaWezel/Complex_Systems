@@ -15,6 +15,7 @@ import time
 from itertools import count
 
 def visualize_graph(G):
+    fig = plt.figure()
     nodes_dict = dict(G.nodes(data=True))
 
     # Get unique groups
@@ -25,7 +26,7 @@ def visualize_graph(G):
     colors = [mapping[nodes_dict[node]['data']['class'].name] for node in G.__iter__()]
 
     # Node size gets bigger if the node has more edges going in
-    node_sizes = [in_degree * 3 + 2 for node, in_degree in G.in_degree()]
+    node_sizes = [in_degree * 3 + 5 for node, in_degree in G.in_degree()]
 
     # Use a spring layout for the network
     pos = nx.layout.spring_layout(G)
@@ -34,12 +35,13 @@ def visualize_graph(G):
     nodes = nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=colors, cmap=plt.cm.jet)
     edges = nx.draw_networkx_edges(G, pos, node_size=node_sizes, arrowstyle='->',
                                    arrowsize=5, edge_color='grey',
-                                   width=0.2)
+                                   width=1)
     timer = time.time()
 
     ax = plt.gca()
     ax.set_axis_off()
     # plt.title("Reference graph simulated Java methods")
 
-    os.makedirs('output/figures', exist_ok=True)
-    plt.savefig("./output/figures/network_" + str(timer) + ".png", dpi=500)
+    os.makedirs('./web_output', exist_ok=True)
+    plt.savefig("./web_output/network.png", dpi=500)
+    plt.close()

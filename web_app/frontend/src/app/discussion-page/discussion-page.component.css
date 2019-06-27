@@ -1,0 +1,28 @@
+.first-elem {
+    flex-direction: column !important;
+}
+
+.top {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 5%;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 75%;
+    font-size: 25px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.footer {
+  text-align: center;
+}

@@ -2,6 +2,11 @@
     overflow: visible !important;
 }
 
+.proba-warning {
+    margin-top: 50px;
+    color: red;
+}
+
 .run-btn {
     font-size: 2rem;
     background: black;
@@ -39,4 +44,19 @@
     margin-top: 5%;
     font-size: 2.5rem;
     color: white;
+}
+
+.figure-result {
+    width: 45%;
+}
+
+.result-img-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.result-img {
+    width: 100%;
 }

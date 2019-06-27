@@ -1,6 +1,7 @@
 .first-elem {
     flex-direction: column !important;
     align-items: center;
+    height: auto !important;
 }
 
 .title {
@@ -23,11 +24,31 @@
 .param-slider {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.param-name {
+    width:150px;
 }
 
 .sub-sub-title {
     margin-top: 50px;
+    font-size: 2rem;
+}
+
+.proba-sum {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.proba-sum-num {
+    color: red;
+    display: inline;
+}
+
+.proba-sum-num.number-normal {
+    color: white;
 }
 
 p {

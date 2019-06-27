@@ -1,11 +1,15 @@
 <div class="first-elem">
 
   <div class="sub-title">
-    2. Run model
+    2. Run the model
   </div>
 
-  <button *ngIf="!running" class="run-btn" [disabled]="running" type="button" (click)="runModel()">Run the model!</button> 
-  <button *ngIf="running" class="run-btn" [disabled]="running" type="button">Wait for the model to finish running</button> 
+  <div class="proba-warning" *ngIf="_modelService.getProbaSum() !== 1">
+    The sum of the action probabilities has to be 1.0 to run the model.
+  </div>
+
+  <button *ngIf="!running" class="run-btn" [disabled]="running || _modelService.getProbaSum() !== 1" type="button" (click)="runModel()">Start!</button> 
+  <button *ngIf="running" class="run-btn" [disabled]="running || _modelService.getProbaSum() !== 1" type="button">Wait for the model to finish running</button> 
 
   <div class="sub-title">
     3. Visualise & Analyse
@@ -17,7 +21,7 @@
   </div>
 
   <div class="results-place-holder" *ngIf="!firstRun">
-    Run the model to view their results!
+    Run the model to view results!
   </div>
 
   <div class="gource-result" *ngIf="gourceUrl && !running">
@@ -25,6 +29,16 @@
       <source [src]="gourceUrl" type="video/mp4" />
       Browser not supported
     </video>
+  </div>
+
+  <div class="result-img-container">
+    <div class="figure-result" *ngIf="powerlawUrl && !running">
+      <img class="result-img" [src]="powerlawUrl">
+    </div>
+  
+    <div class="figure-result" *ngIf="networkUrl && !running">
+      <img class="result-img" [src]="networkUrl">
+    </div>
   </div>
 
 </div>
