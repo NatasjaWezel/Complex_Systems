@@ -31,12 +31,14 @@
     </video>
   </div>
 
-  <div class="figure-result" *ngIf="powerlawUrl && !running">
-    <img class="result-img" [src]="powerlawUrl">
-  </div>
-
-  <div class="figure-result" *ngIf="networkUrl && !running">
-    <img class="result-img" [src]="networkUrl">
+  <div class="result-img-container">
+    <div class="figure-result" *ngIf="powerlawUrl && !running">
+      <img class="result-img" [src]="powerlawUrl">
+    </div>
+  
+    <div class="figure-result" *ngIf="networkUrl && !running">
+      <img class="result-img" [src]="networkUrl">
+    </div>
   </div>
 
 </div>

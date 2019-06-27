@@ -47,7 +47,14 @@
 }
 
 .figure-result {
-    width: 50%;
+    width: 45%;
+}
+
+.result-img-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .result-img {
