@@ -59,16 +59,24 @@ app.post('/run', (req, res) => {
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
                     console.error(`exec error: ${err}`);
-                    return;
+                    console.log('\n\nEncountered error, returning early.\n\nWaiting for new request.\n')
+                    res.json({
+                        output: 'success',
+                        gource: {'url': 'gource.mp4', 'type': 'video/mp4'},
+                        network: {'url': 'network.png', 'type': 'image/png'},
+                        powerlaw: {'url': 'powerlaw.png', 'type': 'image/png', 'success': 'false'}
+                    });
+
+                    res.end();
                 }
-                console.log('Created plot\n\n');
+                console.log('Created plot\n\nWaiting for new request.\n');
 
 
                 res.json({
                     output: 'success',
                     gource: {'url': 'gource.mp4', 'type': 'video/mp4'},
                     network: {'url': 'network.png', 'type': 'image/png'},
-                    powerlaw: {'url': 'powerlaw.png', 'type': 'image/png'}
+                    powerlaw: {'url': 'powerlaw.png', 'type': 'image/png', 'success': 'true'}
                 });
 
                 res.end();
