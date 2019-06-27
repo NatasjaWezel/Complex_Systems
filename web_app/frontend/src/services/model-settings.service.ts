@@ -11,7 +11,7 @@ modelParams = {
   'p_ca_method': 0.4,
   'p_u_method': 0.45,
   'p_d_method': 0.05,
-  'its': 500
+  'its': 2500
 };
 
 constructor() { }

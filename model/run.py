@@ -14,14 +14,16 @@ import csv
 import datetime
 
 from visualize_graph import visualize_graph
+from create_commit_plot import convert
 
 DEFAULT_SIMULATIONS = 100
 DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-LOGGING = False # Creates a fake log for gource
-GRAPH = False # Create a network graph
+LOGGING = True # Creates a fake log for gource
+GRAPH = True # Create a network graph
 EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
+CREATE_COMMITS_CSV = True
 
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment
 DEFAULT_PREF_ATTACH_CONDITION = 1
@@ -94,6 +96,9 @@ def run_repo_model():
 
         if GRAPH:
             visualize_graph(model.reference_graph)
+
+    if CREATE_COMMITS_CSV:
+        convert(filename)
 
 def gather_results(model, generate_files):
     """

@@ -118,3 +118,4 @@ model/results/*
 
 /web_app/backend/output/*
 /web_app/backend/results/*
+/web_app/backend/web_output/*

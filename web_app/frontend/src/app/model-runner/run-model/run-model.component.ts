@@ -12,7 +12,11 @@ export class RunModelComponent implements OnInit {
 
   firstRun: boolean;
   running: boolean;
+
   gourceUrl: string;
+  powerlawUrl: string;
+  networkUrl: string;
+
   runs: number;
 
   constructor(public _modelService: ModelSettingsService, private _apiService: ApiService) { }
@@ -33,8 +37,13 @@ export class RunModelComponent implements OnInit {
       console.log(res);
       this.running = false;
 
-      this.gourceUrl = this._apiService.apiUrl + 
+      this.gourceUrl = this._apiService.apiUrl +
         'file/' + res['gource']['url'] + '?' + 'type=' + res['gource']['type'] + '&runs=' + this.runs + '';
+      this.powerlawUrl = this._apiService.apiUrl +
+        'file/' + res['powerlaw']['url'] + '?' + 'type=' + res['powerlaw']['type'] + '&runs=' + this.runs + '';
+      this.networkUrl = this._apiService.apiUrl +
+        'file/' + res['network']['url'] + '?' + 'type=' + res['network']['type'] + '&runs=' + this.runs + '';
+
 
     });
   }
