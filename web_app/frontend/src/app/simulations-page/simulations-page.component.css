@@ -1,0 +1,27 @@
+.first-elem {
+    flex-direction: column !important;
+}
+
+.header-simulation {
+    text-align: center;
+    font-size: 50px;
+    margin-top: 5%;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 75%;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.theory_list {
+  font-size: 25px;
+}
