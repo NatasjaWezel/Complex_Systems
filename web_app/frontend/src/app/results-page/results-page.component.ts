@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-results-page',
@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResultsPageComponent implements OnInit {
 
+  hidden = true;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    const key = event.key;
+    if (key === 'enter') {
+      this.hidden = false;
+    }
   }
 
 }
