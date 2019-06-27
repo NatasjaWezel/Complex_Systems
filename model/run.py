@@ -16,17 +16,17 @@ import datetime
 from visualize_graph import visualize_graph
 from create_commit_plot import convert
 
-DEFAULT_SIMULATIONS = 100
+DEFAULT_SIMULATIONS = 10
 DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 LOGGING = True # Creates a fake log for gource
 GRAPH = True # Create a network graph
-EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
+EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 CREATE_COMMITS_CSV = True
 
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment
-DEFAULT_PREF_ATTACH_CONDITION = 1
+DEFAULT_PREF_ATTACH_CONDITION = 2
 
 PROBABILITIES = {
     'create_method': 0.1,
@@ -92,7 +92,7 @@ def run_repo_model():
 
         gen = True if len(sys.argv) > 2 and sys.argv[2] == 'True' else False
         gather_results(model, gen)
-        filename = append_outputfile_try(model, sim, filename, iterations, add_prob)
+        filename = append_outputfile_try(model, sim, filename, iterations, add_prob, pref_attach_condition)
 
         if GRAPH:
             visualize_graph(model.reference_graph)
@@ -140,7 +140,7 @@ def create_outputfile(iterations, add_prob, pref_attach_condition):
 
     return filename
 
-def append_outputfile_try(model, sim, filename, iterations, add_prob):
+def append_outputfile_try(model, sim, filename, iterations, add_prob, pref_attach_condition):
     """
     Appends results from a simulation to the output file with one row per simulation step
     Creates new file if there is a memory error
@@ -153,7 +153,7 @@ def append_outputfile_try(model, sim, filename, iterations, add_prob):
 
     # Create new file if there is a memoryerror and add entire simulation results
     except MemoryError:
-        filename = create_outputfile(iterations, add_prob)
+        filename = create_outputfile(iterations, add_prob, pref_attach_condition)
         append_outputfile(model, sim, filename)
 
     return filename
