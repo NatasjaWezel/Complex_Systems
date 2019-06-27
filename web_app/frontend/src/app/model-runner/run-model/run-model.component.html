@@ -24,16 +24,26 @@
     Run the model to view results!
   </div>
 
-  <div class="gource-result" *ngIf="gourceUrl && !running">
+  <div class="gource-result" *ngIf="gourceUrl && !running && !failed">
     <video #videoPlayer playsinline autoplay muted loop>
       <source [src]="gourceUrl" type="video/mp4" />
       Browser not supported
     </video>
   </div>
 
+  <div class="power-error-text failed" *ngIf="failed">
+    Simulation has unfortunately failed.
+  </div>
+
   <div class="result-img-container">
-    <div class="figure-result" *ngIf="powerlawUrl && !running">
+    <div class="figure-result" *ngIf="powerlawUrl && !running && !powerError">
       <img class="result-img" [src]="powerlawUrl">
+    </div>
+
+    <div class="figure-result" *ngIf="!running && powerError">
+      <div class="power-error-text">
+        No powerlaw plot possible with chosen probabilities
+      </div>
     </div>
   
     <div class="figure-result" *ngIf="networkUrl && !running">

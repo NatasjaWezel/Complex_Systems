@@ -48,13 +48,22 @@ app.post('/run', (req, res) => {
         const cmd = 'gource --seconds-per-day 5 --hide dirnames, filenames ./vid/code.log -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 web_output/gource.mp4';
         exec(cmd, (err, stdout, stderr) => {
             if (err) {
-              console.error(`exec error: ${err}`);
-              return;
+                console.error(`exec error: ${err}`);
+                console.log('\n\nCould not create video\n');
+
+                res.json({
+                    output: 'failed',
+                    network: {'url': 'network.png', 'type': 'image/png'}
+                });
+
+                res.end();
+
+                return;
             }
 
             console.log('Created video');
 
-            
+
             const cmd = 'Rscript --save ./Merelo_web.R'
             exec(cmd, (err, stdout, stderr) => {
                 if (err) {
@@ -68,18 +77,18 @@ app.post('/run', (req, res) => {
                     });
 
                     res.end();
+                } else {
+                    console.log('Created plot\n\nWaiting for new request.\n');
+
+                    res.json({
+                        output: 'success',
+                        gource: {'url': 'gource.mp4', 'type': 'video/mp4'},
+                        network: {'url': 'network.png', 'type': 'image/png'},
+                        powerlaw: {'url': 'powerlaw.png', 'type': 'image/png', 'success': 'true'}
+                    });
+
+                    res.end();
                 }
-                console.log('Created plot\n\nWaiting for new request.\n');
-
-
-                res.json({
-                    output: 'success',
-                    gource: {'url': 'gource.mp4', 'type': 'video/mp4'},
-                    network: {'url': 'network.png', 'type': 'image/png'},
-                    powerlaw: {'url': 'powerlaw.png', 'type': 'image/png', 'success': 'true'}
-                });
-
-                res.end();
             })
 
         });
@@ -92,7 +101,7 @@ app.get('/file/*', (req, res) => {
     let file = '';
     if (Object.keys(req.query).length > 0) {
         file = req.url.substring(
-            6, // Skip /file/ 
+            6, // Skip /file/
             req.url.lastIndexOf("?")
         );
     } else {

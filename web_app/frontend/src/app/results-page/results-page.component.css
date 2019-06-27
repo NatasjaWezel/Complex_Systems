@@ -41,9 +41,13 @@
 
 .text-wrap {
     display: flex;
-    justify-content: space-around;
-    width: 75%;
+    justify-content: space-between;
+    width: 60%;
     margin: auto;
-    margin-top: 2%;
     font-size: 1.25rem;
+    margin-top: -3%;
+}
+
+.text-wrap.powerlaw {
+    padding-left: 10%;
 }
