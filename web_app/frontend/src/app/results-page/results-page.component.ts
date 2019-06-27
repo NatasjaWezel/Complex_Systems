@@ -17,7 +17,8 @@ export class ResultsPageComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     const key = event.key;
-    if (key === 'enter') {
+    console.log(key);
+    if (key === 'Enter') {
       this.hidden = false;
     }
   }
