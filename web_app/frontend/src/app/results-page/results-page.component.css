@@ -1,18 +1,28 @@
 .first-elem {
     flex-direction: column !important;
+    height: auto !important;
 }
 
-.top {
-    text-align: center;
-    font-size: 2rem;
+.title {
     margin-top: 5%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 2.5rem;
 }
-
+.sub-title {
+    margin-top: 5%;
+    font-size: 1.5rem;
+    margin-bottom: 1%;
+    margin-left: auto; 
+    margin-right: auto;
+}
 .content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
-    height: 75%;
+    
+    align-content: center;
 }
 
 .col {
@@ -20,4 +30,11 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+}
+
+.res{
+    max-width: 70%;
+    max-height: 80%;
+    margin-left: auto; 
+    margin-right: auto; 
 }
