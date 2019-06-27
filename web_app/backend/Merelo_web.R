@@ -6,12 +6,12 @@ print(.libPaths())
 simulation.name <- 'WebAppRun'
 print('Found R script')
 ## ----setup, cache=FALSE,echo=FALSE,warning=FALSE,message=FALSE-----------
-library(ggplot2, lib.loc='C:/Users/matev/Documents/R/win-library/3.6')
-library("ggfortify", lib.loc='C:/Users/matev/Documents/R/win-library/3.6')
-library(ggthemes, lib.loc='C:/Users/matev/Documents/R/win-library/3.6') # package ‘ggthemes’’ is not available (for R version 3.5.0)
-library(dplyr, lib.loc='C:/Users/matev/Documents/R/win-library/3.6')
-library(TTR, lib.loc='C:/Users/matev/Documents/R/win-library/3.6')
-library(xtable, lib.loc='C:/Users/matev/Documents/R/win-library/3.6')
+library(ggplot2, lib.loc='~/Documents/R/win-library/3.6')
+library("ggfortify", lib.loc='~/Documents/R/win-library/3.6')
+library(ggthemes, lib.loc='~/Documents/R/win-library/3.6') # package ‘ggthemes’’ is not available (for R version 3.5.0)
+library(dplyr, lib.loc='~/Documents/R/win-library/3.6')
+library(TTR, lib.loc='~/Documents/R/win-library/3.6')
+library(xtable, lib.loc='~/Documents/R/win-library/3.6')
 
 amount_of_simulations = 1
 #use 
