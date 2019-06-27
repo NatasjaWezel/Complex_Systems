@@ -71,9 +71,9 @@ def get_lines_for_data(data, f0):
 
 if __name__ == "__main__":
 
-    filename = "result_reproduce_fit0_its100000_addprob1_pref3_merged.csv"
+    filename = "merged_dataframes_pref2.csv"
     data = pd.read_csv(filename)
-    data = data[data['sim']<=60]
+    data = data[data['sim']<60]
 
     f0=.5
     list_of_sizes = get_lines_for_data(data, f0)
