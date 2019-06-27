@@ -2,6 +2,11 @@
     overflow: visible !important;
 }
 
+.proba-warning {
+    margin-top: 50px;
+    color: red;
+}
+
 .run-btn {
     font-size: 2rem;
     background: black;

@@ -37,6 +37,20 @@
     font-size: 2rem;
 }
 
+.proba-sum {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.proba-sum-num {
+    color: red;
+    display: inline;
+}
+
+.proba-sum-num.number-normal {
+    color: white;
+}
+
 p {
     margin-top: 25px;
 }

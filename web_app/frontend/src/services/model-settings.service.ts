@@ -16,4 +16,11 @@ modelParams = {
 
 constructor() { }
 
+  getProbaSum() {
+    return this.modelParams['p_cr_method'] +
+          this.modelParams['p_d_method'] +
+          this.modelParams['p_ca_method'] +
+          this.modelParams['p_u_method'];
+  }
+
 }

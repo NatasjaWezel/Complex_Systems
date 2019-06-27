@@ -4,8 +4,12 @@
     2. Run the model
   </div>
 
-  <button *ngIf="!running" class="run-btn" [disabled]="running" type="button" (click)="runModel()">Start!</button> 
-  <button *ngIf="running" class="run-btn" [disabled]="running" type="button">Wait for the model to finish running</button> 
+  <div class="proba-warning" *ngIf="_modelService.getProbaSum() !== 1">
+    The sum of the action probabilities has to be 1.0 to run the model.
+  </div>
+
+  <button *ngIf="!running" class="run-btn" [disabled]="running || _modelService.getProbaSum() !== 1" type="button" (click)="runModel()">Start!</button> 
+  <button *ngIf="running" class="run-btn" [disabled]="running || _modelService.getProbaSum() !== 1" type="button">Wait for the model to finish running</button> 
 
   <div class="sub-title">
     3. Visualise & Analyse

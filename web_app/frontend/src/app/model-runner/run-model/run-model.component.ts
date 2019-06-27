@@ -15,7 +15,7 @@ export class RunModelComponent implements OnInit {
   gourceUrl: string;
   runs: number;
 
-  constructor(private _modelService: ModelSettingsService, private _apiService: ApiService) { }
+  constructor(public _modelService: ModelSettingsService, private _apiService: ApiService) { }
 
   ngOnInit() {
     this.running = false;

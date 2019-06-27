@@ -13,12 +13,7 @@
 
     <div class="param-slider">
       <div class="param-name"><p>Create method:</p></div>
-      <div><p class=""> <input type="number" [(ngModel)]="p_c_class"></p></div>
-      <ng5-slider [(value)]="p_c_class" [options]="options" (valueChange)="valChange($event, 'p_c_class')"></ng5-slider>
-    </div>
-    <div class="param-slider">
-      <div class="param-name"><p>Create class:  </p></div>
-      <div><p> <input type="number" [(ngModel)]="p_cr_method"></p></div>
+      <div><p class=""> <input type="number" [(ngModel)]="p_cr_method"></p></div>
       <ng5-slider [(value)]="p_cr_method" [options]="options" (valueChange)="valChange($event, 'p_cr_method')"></ng5-slider>
     </div>
     <div class="param-slider">
@@ -36,6 +31,16 @@
       <div class="param-name"><p>Remove method:</p></div>
       <div><p> <input type="number" [(ngModel)]="p_d_method"></p></div>
       <ng5-slider [(value)]="p_d_method" [options]="options" (valueChange)="valChange($event, 'p_d_method')"></ng5-slider>
+    </div>
+
+    <div class="proba-sum">
+      Sum of the action probabilities is currently: <div class="proba-sum-num" [ngClass]="{'number-normal': _modelService.getProbaSum() == 1}">{{_modelService.getProbaSum()}}</div>
+    </div>
+
+    <div class="param-slider">
+      <div class="param-name"><p>Create class:  </p></div>
+      <div><p> <input type="number" [(ngModel)]="p_c_class"></p></div>
+      <ng5-slider [(value)]="p_c_class" [options]="options" (valueChange)="valChange($event, 'p_c_class')"></ng5-slider>
     </div>
 
     <div class="sub-sub-title">
