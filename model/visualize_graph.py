@@ -15,6 +15,7 @@ import time
 from itertools import count
 
 def visualize_graph(G):
+    fig = plt.figure()
     nodes_dict = dict(G.nodes(data=True))
 
     # Get unique groups
@@ -43,3 +44,4 @@ def visualize_graph(G):
 
     os.makedirs('output/figures', exist_ok=True)
     plt.savefig("./output/figures/network_" + str(timer) + ".png", dpi=500)
+    plt.close()

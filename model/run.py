@@ -19,11 +19,12 @@ DEFAULT_SIMULATIONS = 100
 DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-LOGGING = True # Creates a fake log for gource
+LOGGING = False # Creates a fake log for gource
+GRAPH = False # Create a network graph
 EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 
- # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment 
-DEFAULT_PREF_ATTACH_CONDITION = 0
+ # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment
+DEFAULT_PREF_ATTACH_CONDITION = 1
 
 PROBABILITIES = {
     'create_method': 0.1,
@@ -51,7 +52,7 @@ def run_repo_model():
     PROBABILITIES['call_method'] = float(sys.argv[6]) if len(sys.argv) > 6 else PROBABILITIES['call_method']
     PROBABILITIES['update_method'] = float(sys.argv[7]) if len(sys.argv) > 7 else PROBABILITIES['update_method']
     PROBABILITIES['delete_method'] = float(sys.argv[8]) if len(sys.argv) > 8 else PROBABILITIES['delete_method']
-    
+
     pref_attach_condition = float(sys.argv[9]) if len(sys.argv) > 9 else DEFAULT_PREF_ATTACH_CONDITION
 
     assert (EXP_CONDITION in ['reproduce', 'no_rec', 'delete_state'])
@@ -91,7 +92,8 @@ def run_repo_model():
         gather_results(model, gen)
         filename = append_outputfile_try(model, sim, filename, iterations, add_prob)
 
-        visualize_graph(model.reference_graph)
+        if GRAPH:
+            visualize_graph(model.reference_graph)
 
 def gather_results(model, generate_files):
     """
