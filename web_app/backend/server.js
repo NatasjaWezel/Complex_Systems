@@ -11,7 +11,6 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const spawn = require("child_process").spawn;
 const exec = require("child_process").exec;
-const R = require("r-script");
 
 const app = express();
 app.use(cors());
