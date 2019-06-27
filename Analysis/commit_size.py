@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib as plt
 import pandas as pd
 import csv
-
+import os
 
 def get_pos_neg_lines(data):
     """
@@ -71,11 +71,11 @@ def get_lines_for_data(data, f0):
 
 if __name__ == "__main__":
 
-    filename = "result_reproduce_fit0_its100000_time20_20_10_36.csv"
+    filename = "result_reproduce_fit0_its100000_addprob1_pref3_merged.csv"
     data = pd.read_csv(filename)
     data = data[data['sim']<=60]
 
-
+    f0=.5
     list_of_sizes = get_lines_for_data(data, f0)
 
 

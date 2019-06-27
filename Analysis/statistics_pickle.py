@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # filename = "result_delete_state_fit0_its100000_addprob0.8_pref0_time26_21_38_24.csv"
 
     # filename = "result_no_rec_fit0_its100000_time21_11_16_04.csv"
-    filename = "result_reproduce_fit0_its100000_addprob1_pref1_time26_21_46_07.csv"
+    filename = "result_reproduce_fit0_its100000_addprob1_pref3_merged.csv"
     data = pd.read_csv(filename)
     data = data[data['sim']<=60]
     dictionary = get_statistics(data, f0)
