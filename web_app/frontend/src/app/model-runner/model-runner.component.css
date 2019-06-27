@@ -23,11 +23,17 @@
 .param-slider {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.param-name {
+    width:150px;
 }
 
 .sub-sub-title {
     margin-top: 50px;
+    font-size: 2rem;
 }
 
 p {

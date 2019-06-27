@@ -19,7 +19,7 @@ DEFAULT_SIMULATIONS = 100
 DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
-LOGGING = False # Creates a fake log for gource
+LOGGING = True # Creates a fake log for gource
 EXP_CONDITION = 'reproduce' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment 

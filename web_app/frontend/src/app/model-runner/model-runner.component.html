@@ -1,5 +1,5 @@
 <div class="first-elem">
-  <div class="title">Run the model</div>
+  <div class="title">Model demonstration</div>
 
   <div class="sub-title">
     1. Specify the parameters
@@ -8,37 +8,43 @@
   <div class="param-container">
 
     <div class="sub-sub-title">
-      Model probabilities:
+      Model probabilities
     </div>
 
     <div class="param-slider">
-      <p class="">Create method: <input type="number" [(ngModel)]="p_c_class"></p>
+      <div class="param-name"><p>Create method:</p></div>
+      <div><p class=""> <input type="number" [(ngModel)]="p_c_class"></p></div>
       <ng5-slider [(value)]="p_c_class" [options]="options" (valueChange)="valChange($event, 'p_c_class')"></ng5-slider>
     </div>
     <div class="param-slider">
-      <p>Create class: <input type="number" [(ngModel)]="p_cr_method"></p>
+      <div class="param-name"><p>Create class:  </p></div>
+      <div><p> <input type="number" [(ngModel)]="p_cr_method"></p></div>
       <ng5-slider [(value)]="p_cr_method" [options]="options" (valueChange)="valChange($event, 'p_cr_method')"></ng5-slider>
     </div>
     <div class="param-slider">
-      <p>Call method: <input type="number" [(ngModel)]="p_ca_method"></p>
+      <div class="param-name"><p>Call method:</p></div>
+      <div><p> <input type="number" [(ngModel)]="p_ca_method"></p></div>
       <ng5-slider [(value)]="p_ca_method" [options]="options" (valueChange)="valChange($event, 'p_ca_method')"></ng5-slider>
     </div>
     <div class="param-slider">
-      <p>Update method: <input type="number" [(ngModel)]="p_u_method"></p>
+      <div class="param-name"><p>Update method:</p></div>
+      <div><p> <input type="number" [(ngModel)]="p_u_method"></p></div>
       <ng5-slider [(value)]="p_u_method" [options]="options" (valueChange)="valChange($event, 'p_u_method')"></ng5-slider>
     </div>
 
     <div class="param-slider">
-      <p>Remove method: <input type="number" [(ngModel)]="p_d_method"></p>
+      <div class="param-name"><p>Remove method:</p></div>
+      <div><p> <input type="number" [(ngModel)]="p_d_method"></p></div>
       <ng5-slider [(value)]="p_d_method" [options]="options" (valueChange)="valChange($event, 'p_d_method')"></ng5-slider>
     </div>
 
     <div class="sub-sub-title">
-      Iterations:
+      Iterations
     </div>
 
     <div class="param-slider">
-      <p>Iterations: <input type="number" [(ngModel)]="its"></p>
+      <div class="param-name"><p>Iterations: </p></div>
+      <div><p><input type="number" [(ngModel)]="its"></p></div>
       <ng5-slider [(value)]="its" [options]="optionsIts" (valueChange)="valChange($event, 'its')"></ng5-slider>
     </div>
   </div>
