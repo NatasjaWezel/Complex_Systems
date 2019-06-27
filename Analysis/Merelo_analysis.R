@@ -50,19 +50,18 @@ library(xtable)
 amount_of_simulations = 60
 #use 
 # set the location of the result files
-pref <- ''
+pref <- 'simulation_results/'
 # give the names of the result files excluding .csv
 files <- c()
 # REDUCE PLOTS
-if (FALSE){
-for (i in 0:0){#(amount_of_simulations-1)){
-  files = append(files,paste0('simulation',i))
+
+for (i in 0:9){#(amount_of_simulations-1)){
+  files = append(files,paste0('commit_list',i,simulation.name))
 }
-}
-files = 'simulation_results/commit_list0'
+
 # name the files
 urls <- files
-# name of the languages in which the prjects were written
+# name of the languages in which the projects were written
 language <- 'java'
 
 age <-  data.frame(Name = character(),
@@ -112,7 +111,7 @@ for (i in 1:length(lines) ) {
                                      Intercept = summary(sizes.fit)$coefficients[1],
                                      Coefficient = summary(sizes.fit)$coefficients[2] ))
   ggplot(lines.count, aes(x=colummn, y=count))+geom_point()+scale_x_log10()+scale_y_log10()+stat_smooth() +
-    ggtitle(lines[[i]]$url) + xlab("Commit size") + ylab("Frequency") + 
+     xlab("Commit size") + ylab("Frequency") + 
     theme(
       legend.position="none", 
       plot.title = element_text(color="white"),
@@ -124,9 +123,10 @@ for (i in 1:length(lines) ) {
     )
   
   lines[[i]]$repo = gsub("/","_",trimws(repo[[1]][1]))
-  ggsave(paste0("figure/",simulation.name,"-linecount-",lines[[i]]$repo,".png"),device='png')
+  ggsave(paste0("figure/",simulation.name,lines[[i]]$url,"-linecount-.png"),device='png')
 }
 
+if (FALSE){
 ## ----powerlaw,message=FALSE, fig.subcap=summary$Name,echo=FALSE,warning=FALSE,fig.height=4,out.width='.115\\linewidth'----
 zipf.fit.df <- data.frame(Name = character(),
                           Coefficient = double(),
@@ -153,7 +153,7 @@ for (i in 1:length(lines) ) {
                                     Coefficient = summary(zipf.fit)$coefficients[2] ))
 }
 
-if (FALSE){
+
 
 ## ----autocorrelation,message=FALSE, cache=FALSE,echo=FALSE,fig.height=4,fig.subcap=summary$Name,out.width='.115\\linewidth'----
 for (i in 1:length(lines) ) {
