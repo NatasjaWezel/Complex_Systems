@@ -13,6 +13,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     height: 75%;
+    font-size: 25px;
 }
 
 .col {

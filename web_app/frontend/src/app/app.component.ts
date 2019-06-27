@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     const key = event.key;
+    console.log(key);
     if (key === 'ArrowRight') {
       this.active += 1;
       this.scroll();
@@ -58,7 +59,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else if (this.active > 9) {
       this.active = 9;
     }
-    this.elements[this.active].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    console.log('scroll');
+    this.elements[this.active].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
   }
 
 }
