@@ -1,43 +1,11 @@
 # Create a log log and commits ordered on size plot as done by Merelo
 
-setwd("/Users/koengreuell/Documents/1819css/sourcetree/Analysis")
-simulation.name <- readline(prompt="Enter simulation name: ")
-
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
-  
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-  
-  numPlots = length(plots)
-  
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                     ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-  
-  if (numPlots==1) {
-    print(plots[[1]])
-    
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-    
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-      
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
+working.directory <- toString(readline(prompt="Give the path to working directory where is r file is: "))
+setwd(working.directory)
+simulation.name <- 'reproduction'
+#simulation.name <- toString(readline(prompt="Give the name of the condition simulated you want to plot: "))
+amount_of_simulations = 6
+#amount_of_simulations <- toString(readline(prompt="Give the amount of simulations you want to plot: "))
 
 ## ----setup, cache=FALSE,echo=FALSE,warning=FALSE,message=FALSE-----------
 library(ggplot2)
@@ -47,15 +15,14 @@ library(dplyr)
 library(TTR)
 library(xtable)
 
-amount_of_simulations = 60
 #use 
 # set the location of the result files
-pref <- 'simulation_results/'
+pref <- paste0(working.directory,'/simulation_results/')
 # give the names of the result files excluding .csv
 files <- c()
 # REDUCE PLOTS
 
-for (i in 0:9){#(amount_of_simulations-1)){
+for (i in 0:(amount_of_simulations-1)){
   files = append(files,paste0('commit_list',i,simulation.name))
 }
 
