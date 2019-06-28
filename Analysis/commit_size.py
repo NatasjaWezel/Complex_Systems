@@ -70,6 +70,10 @@ def get_lines_for_data(data, f0):
 
 
 if __name__ == "__main__":
+    """
+    Creates a csv file of the commit sizes for the exp condition
+    cols: simulation index, commit index, commit size
+    """
 
     filename = "merged_dataframes_pref2.csv"
     data = pd.read_csv(filename)
@@ -82,7 +86,7 @@ if __name__ == "__main__":
     # Create folder
     os.makedirs('commit_sizes', exist_ok=True)
     # Create file
-    filename = "commits_" + filename
+    filename = "commit_sizes/commits_" + filename
     with open(filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         # Header
