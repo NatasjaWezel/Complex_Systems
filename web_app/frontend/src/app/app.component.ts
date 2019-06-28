@@ -37,17 +37,22 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.elements = [this.lan, this.f, this.s, this.t, this.third, this.fourth, this.model, this.sim, this.res, this.dis];
+    this.elements = [this.lan, this.f, this.s, this.t, this.third, this.model, this.fourth, this.sim, this.res, this.dis];
   }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     const key = event.key;
-    console.log(key);
-    if (key === 'ArrowRight') {
+    if (key === 'ArrowRight' || key === 'PageDown') {
+      if (key === 'PageDown') {
+        event.preventDefault();
+      }
       this.active += 1;
       this.scroll();
-    } else if (key === 'ArrowLeft') {
+    } else if (key === 'ArrowLeft' || key === 'PageUp') {
+      if (key === 'PageUp') {
+        event.preventDefault();
+      }
       this.active -= 1;
       this.scroll();
     }
@@ -59,7 +64,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else if (this.active > 9) {
       this.active = 9;
     }
-    console.log('scroll');
     this.elements[this.active].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
   }
 
