@@ -1,6 +1,8 @@
 # Self Organized Criticality in Code Repositories
 Project for the Complex System Simulation course in the UvA Master Computational Science.
 
+A model has been created to run different experiments based on generating code files using four different actions each iteration and analysing when commits are made based on fitness values that are assigned to each method.
+
 ## Why Power Laws? An Explanation from Fine-Grained Code Changes
 Abstract Syntax Tree
 
@@ -8,28 +10,46 @@ Evolution of Software
 
 Fitness of methods -> Uniform (random) distribution
 
-### Creating
+### Code base
 
-### Calling
-Take two functions and link them
+#### Analysis
 
-Question: how are these selected? Via something preferential?
-Answer: method S is chosen as the caller with probability proportional to the size of its body (number of statements).
+Contains the analysis scripts in R to reproduce plots and in python to run statistical tests against the data.
 
-### Updating
+#### Model
 
-### Deleting
+Contains the full model code in python, everything written by us, except java_printer, which was taken from the original simulation model paper github repository.
 
-#### Ideas
-Code decay -> fitness decrease over time?
-Question: why?
+- run.py
 
-#### RUNNING the code:
-<> optional arguments (and default values)
-python run.py <iterations=1000> <gen_java_files=False>
+Runs the model
 
-#### Comments
-\# Hoofdletter, geen punt
+- model.py
 
-#### REMEMBER
-PLYJ model.py van github halen, oude versie installed door pip is niet goed!
+Contains the model code
+
+- visualize_graph, webFigures, create_commit_plot
+
+Code containing transformation figures to create output based on the results from the model run
+
+- AST.py
+
+Code to manipulate internal representated code in AST format.
+
+#### Scripts
+
+Contains a python script replicating the paper that scrapes github repositories for absolute changes per commit
+
+#### web_app
+
+Contains web app code for the front end (Angular application) and backend (NodeJS server). This folder has a seperate README for installation.
+
+#### literature
+
+Contains literature used
+
+### RUNNING the code:
+python run.py
+
+### NOTE
+PLYJ model.py is outdated on pip, install newest version from their github repository.
