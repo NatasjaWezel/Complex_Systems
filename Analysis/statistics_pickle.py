@@ -164,13 +164,13 @@ if __name__ == "__main__":
     """
     Writes a pickle file with the statistics of the exp. condition
     """
+    # Change filename to the file you want to analyse
+    filename = "result_msr_MSR_fit0_its100000_addprob1_time26_20_13_22.csv"
+
     f0 = .5
 
-    # filename = "result_delete_state_fit0_its100000_addprob0.8_pref0_time26_21_38_24.csv"
     os.makedirs('commit_sizes', exist_ok=True)
 
-    # filename = "result_no_rec_fit0_its100000_time21_11_16_04.csv"
-    filename = "merged_dataframes_pref2.csv"
     data = pd.read_csv(filename)
     data = data[data['sim']<60]
     data['action'][data['action']=='delete_method'] = 'remove_method'

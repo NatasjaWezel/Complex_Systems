@@ -75,7 +75,7 @@ if __name__ == "__main__":
     cols: simulation index, commit index, commit size
     """
 
-    filename = "merged_dataframes_pref2.csv"
+    filename = "result_msr_MSR_fit0_its100000_addprob1_time26_20_13_22.csv"
     data = pd.read_csv(filename)
     data = data[data['sim']<60]
 
