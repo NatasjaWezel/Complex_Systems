@@ -1,8 +1,8 @@
-This directory contains:
+﻿This directory contains:
 
-analysis_multiple_sims.ipynb
+analysis_multiple_sims_plot.ipynb
+	- used the pickles files from the simulation results; output of statistics_pickle.py
 	which can:
-	- determine the commit sizes from a datafile created by run.py which can be found in the model directory
 	- plot Mean minimal fitness per simulation
 	- plot Mean minimal fitness of the commits per simulation
 	- plot Mean value of max(insertions, deletions)\nof the commits per simulation
@@ -22,10 +22,15 @@ KS_test.R
 	arXiv preprint arXiv:1905.11044.
 	
 results_plots.ipynb
+	For a single simulation:
 	plot Lowest fitness in repository per timestep
 	plot Lowest fitness in a commit per step
 	plot Number of steps per commit
 	plot Number of steps per commit
 	plot Proportions of last actions per commit
 	plot Mean fitness of all methods
-Number of methods over time
+	Number of methods over time
+
+Power_law_analysis.ipynb
+	Uses the csv files of the commit sizes per simulation to investigate the power laws
+	Per condition we create a synthetic data set by bootstrapping an equal number of simulations with the N commits (N= mean number of commits in the condition). From these data sets we fit the power law and save the exponent (gamma) to create a distribution of gamma values. These distributions are then analysed with stats.f_oneway ANOVA.
