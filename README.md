@@ -37,8 +37,11 @@ python run.py <iterations=1000> <gen_java_files=False>
 PLYJ model.py van github halen, oude versie installed door pip is niet goed!
 
 
-Folders:
+#### Folders:
 - Analysis: contains the analysis notebooks and R files, and the scripts used for extracting statistics
 - Codevo3-MSR2015: code from Zhongpeng & Whitehead (2015),  we added the saving of variables and run.py. Use codev0/run.py to run the model with the correct settings.
 - Model: the model used in our experiments. Use run.py to run the model with the correct parameters.
 - TODO
+
+#### Data:
+https://we.tl/t-K28O0wZ3qp
