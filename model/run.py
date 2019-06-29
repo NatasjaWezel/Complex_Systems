@@ -8,6 +8,7 @@ import sys
 import os
 
 # Custom imports
+# Model code from https://github.com/linzhp/Codevo3/releases/tag/MSR2015
 from model import code_dev_simulation
 from java_printer import JavaPrinter
 import csv
