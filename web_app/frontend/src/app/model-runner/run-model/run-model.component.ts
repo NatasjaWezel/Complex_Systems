@@ -17,13 +17,18 @@ export class RunModelComponent implements OnInit {
   powerlawUrl: string;
   networkUrl: string;
 
+  failed: boolean;
+  powerError: boolean;
+
   runs: number;
 
   constructor(public _modelService: ModelSettingsService, private _apiService: ApiService) { }
 
   ngOnInit() {
     this.running = false;
+    this.failed = false;
     this.firstRun = false;
+    this.powerError = false;
     this.runs = 0;
   }
 
@@ -37,14 +42,20 @@ export class RunModelComponent implements OnInit {
       console.log(res);
       this.running = false;
 
-      this.gourceUrl = this._apiService.apiUrl +
-        'file/' + res['gource']['url'] + '?' + 'type=' + res['gource']['type'] + '&runs=' + this.runs + '';
-      this.powerlawUrl = this._apiService.apiUrl +
-        'file/' + res['powerlaw']['url'] + '?' + 'type=' + res['powerlaw']['type'] + '&runs=' + this.runs + '';
-      this.networkUrl = this._apiService.apiUrl +
-        'file/' + res['network']['url'] + '?' + 'type=' + res['network']['type'] + '&runs=' + this.runs + '';
-
-
+      if (res['output'] === 'failed') {
+        this.failed = true;
+        this.networkUrl = this._apiService.apiUrl +
+          'file/' + res['network']['url'] + '?' + 'type=' + res['network']['type'] + '&runs=' + this.runs + '';
+        this.powerError = true;
+      } else {
+        this.gourceUrl = this._apiService.apiUrl +
+          'file/' + res['gource']['url'] + '?' + 'type=' + res['gource']['type'] + '&runs=' + this.runs + '';
+        this.powerError = (res['powerlaw']['success'] === 'true') ? false : true;
+        this.powerlawUrl = this._apiService.apiUrl +
+          'file/' + res['powerlaw']['url'] + '?' + 'type=' + res['powerlaw']['type'] + '&runs=' + this.runs + '';
+        this.networkUrl = this._apiService.apiUrl +
+          'file/' + res['network']['url'] + '?' + 'type=' + res['network']['type'] + '&runs=' + this.runs + '';
+      }
     });
   }
 }

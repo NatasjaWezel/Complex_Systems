@@ -60,3 +60,12 @@
 .result-img {
     width: 100%;
 }
+
+.power-error-text {
+    font-size: 2rem;
+    color: red;
+}
+
+.power-error-text.failed {
+    margin-top: 5%;
+}

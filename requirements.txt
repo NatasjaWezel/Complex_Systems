@@ -1,3 +1,4 @@
+python:
 gitdb
 gitpython
 pandas
@@ -5,6 +6,14 @@ seaborn
 matplotlib
 numpy
 scipy
-networkx==1.11
+networkx
 plyj
 datetime
+
+R:
+library(ggplot2)
+library("ggfortify")
+library(ggthemes)
+library(dplyr)
+library(TTR)
+library(xtable)

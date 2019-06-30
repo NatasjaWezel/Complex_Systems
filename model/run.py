@@ -17,12 +17,9 @@ import datetime
 from visualize_graph import visualize_graph
 from create_commit_plot import convert
 
-<<<<<<< HEAD
-DEFAULT_SIMULATIONS = 60
-=======
-DEFAULT_SIMULATIONS = 10
->>>>>>> 314fc918095e18a9dbf1dce374a5c54d76f66ba7
-DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 1
+DEFAULT_ITERATIONS = 10000 # 100,000 steps is around 15 mins
+
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 LOGGING = True # Creates a fake log for gource
@@ -30,13 +27,8 @@ GRAPH = True # Create a network graph
 EXP_CONDITION = 'delete_state' # reproduce (recursion/multiple calls possible), 'no_rec', 'delete_state' ...
 CREATE_COMMITS_CSV = True
 
-<<<<<<< HEAD
- # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment 
-DEFAULT_PREF_ATTACH_CONDITION = 3
-=======
  # 0 = caller and callee use pref attachment, 1 = only caller, 2 = only callee, 3 = no preferential attachment
 DEFAULT_PREF_ATTACH_CONDITION = 0
->>>>>>> 314fc918095e18a9dbf1dce374a5c54d76f66ba7
 
 PROBABILITIES = {
     'create_method': 0.1,
