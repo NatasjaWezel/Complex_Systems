@@ -34,6 +34,8 @@ Make sure there is a /dist/ folder available, which holds all the static front e
 
 It can be accessed in your browser by navigating to 'localhost:8080'.
 
+For generating the Powerlaw plots the Web App uses R scripts. These only work on windows.
+
 ### Authors:
 * Mathijs Maijer
 * Esra Solak
