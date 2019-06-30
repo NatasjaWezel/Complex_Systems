@@ -32,6 +32,7 @@ https://we.tl/t-K28O0wZ3qp
 ### Sneak preview for the results
 The models give power-law like behavior in the code repositories. While trying to simplify the model, we got rid of the preferential attachment criteria for calling methods. We see differences in the behavior of the model, but we don't see statistical significant differences between the powerlaws of these simulations.
 ![Network Graphs](figures/pref_attachment_BOTH.png "Network graphs")
+On the right we see the network without preferential attachment, on the left with. Edges are method calls, nodes are methods.
 
 ## Authors
 * Mathijs Maijer
