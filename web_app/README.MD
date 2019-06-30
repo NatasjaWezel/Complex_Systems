@@ -18,6 +18,8 @@ Open a terminal, to start developing type `ng serve`. This will run a local deve
 
 When development has been finished, and you want to serve your application on the backend, run `ng build --prod`. This will generate a 'dist' folder in the frontend directory. This directory can be copy and pasted to the /backend/ backend folder.
 
+Get the static assets folder and put them in the frontend/src folder.
+
 ### Back end
 
 #### Installation
@@ -33,13 +35,8 @@ Make sure there is a /dist/ folder available, which holds all the static front e
 It can be accessed in your browser by navigating to 'localhost:8080'.
 
 ### Authors:
-
-- Mathijs
-
-- Linda
-
-- Esra
-
-- Natasja
-
-- Koen
+* Mathijs Maijer
+* Esra Solak
+* Linda Wouters
+* Koen Greuell
+* Natasja Wezel
