@@ -9,6 +9,7 @@ The evolution of software is simulated by starting with a small piece of Java co
 
 ## Prerequisites
 For the videos: install the newest version from gource: https://gource.io
+
 Install R
 
 ## Installing
