@@ -5,7 +5,7 @@ The model is based on the model fro Lin, Zhongpeng, and Jim Whitehead. "Why powe
 
 The evolution of software is simulated by starting with a small piece of Java code, parsing that into an abstract syntax tree and creating, deleting, updating and calling methods for a number of timesteps. Each method has a uniform random fitness.
 
-![Simulation scheme](https://github.com/11027649/Complex_Systems/tree/master/figures/simu.png "Simulation")
+![Simulation scheme](figures/simu.png "Simulation")
 
 ## Prerequisites
 For the videos: install the newest version from gource: https://gource.io
@@ -30,7 +30,7 @@ The standard settings are set. You can change their values in run.py.
 https://we.tl/t-K28O0wZ3qp
 
 ### Sneak preview for the results
-![Network Graphs](https://github.com/11027649/Complex_Systems/tree/master/figures/pref_attachment_BOTH.png "Network graphs")
+![Network Graphs](figures/pref_attachment_BOTH.png "Network graphs")
 
 ## Authors
 * Mathijs Maijer
