@@ -5,6 +5,8 @@ The model is based on the model fro Lin, Zhongpeng, and Jim Whitehead. "Why powe
 
 The evolution of software is simulated by starting with a small piece of Java code, parsing that into an abstract syntax tree and creating, deleting, updating and calling methods for a number of timesteps. Each method has a uniform random fitness.
 
+![Simulation scheme](https://github.com/11027649/Complex_Systems/tree/master/figures/simu.png "Simulation")
+
 ## Prerequisites
 For the videos: install the newest version from gource: https://gource.io
 
@@ -19,15 +21,16 @@ Navigate to the model directory and run:
 ```python run.py ```
 The standard settings are set. You can change their values in run.py.
 
-#### Folders:
+### Folders:
 - Analysis: contains the analysis notebooks and R files, and the scripts used for extracting statistics
 - Codevo3-MSR2015: code from Zhongpeng & Whitehead (2015),  we added the saving of variables and run.py. Use codev0/run.py to run the model with the correct settings.
 - Model: the model used in our experiments. Use run.py to run the model with the correct parameters.
 
-#### Data:
+### Data:
 https://we.tl/t-K28O0wZ3qp
 
-#### Sneak preview for the results
+### Sneak preview for the results
+![Network Graphs](https://github.com/11027649/Complex_Systems/tree/master/figures/pref_attachment_BOTH.png "Network graphs")
 
 ## Authors
 * Mathijs Maijer
