@@ -9,9 +9,10 @@ The evolution of software is simulated by starting with a small piece of Java co
 
 ## Prerequisites
 For the videos: install the newest version from gource: https://gource.io
+Install R
 
 ## Installing
-``` pip install requirements.txt```
+Install the dependencies of Python and R in requirements.txt
 For the PLYJ installation you should get the newest 'model.py' from github: https://github.com/musiKk/plyj/tree/master/plyj
 
 For further instructions on how to install the web application, see the web application folder.
