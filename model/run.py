@@ -16,8 +16,8 @@ import datetime
 from visualize_graph import visualize_graph
 from create_commit_plot import convert
 
-DEFAULT_SIMULATIONS = 10
-DEFAULT_ITERATIONS = 100000 # 100,000 steps is around 15 mins
+DEFAULT_SIMULATIONS = 1
+DEFAULT_ITERATIONS = 10000 # 100,000 steps is around 15 mins
 # fitness method = 0 -> uniform distribution
 FITNESS_METHOD = 0
 LOGGING = True # Creates a fake log for gource
